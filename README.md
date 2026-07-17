@@ -21,13 +21,14 @@ grammars for four platforms (`macos-arm64`, `linux-x86_64`, `linux-arm64`,
 `windows-x86_64`), each built into its own platform-tagged wheel. The three
 non-Windows wheels are verified end to end: installed from the built
 `.whl` (not `-e .`) into clean `python:3.12-slim` containers, with network
-access blocked at parse time. The Windows build is cross-compiled with
-mingw-w64 and statically verified (valid PE32+ DLL, correct exported
-symbol, no non-standard runtime DLL dependencies) but has not been
-dynamically loaded on real Windows — no Windows machine or working Wine
-install was available in this environment; `release.yaml`'s
-`build-windows` job builds it natively on a `windows-latest` GitHub runner
-instead, which is untested until that workflow actually runs.
+access blocked at parse time. `ci.yaml` has run for real on GitHub Actions
+(not just locally/Docker) across `ubuntu-latest`, `macos-latest`, and
+`windows-latest`, each × Python 3.10–3.14 — all 15 jobs green, including a
+from-scratch grammar build and full test suite natively on Windows (via a
+MinGW-w64 toolchain installed in CI, since plain `clang` on Windows targets
+MSVC by default and can't build these grammars the way this project needs).
+`release.yaml`'s wheel-building/publishing path has not yet been run for
+real (only `workflow_dispatch`-triggered, not exercised in this PR).
 
 Bundled languages: `python`, `json`, `javascript`, `typescript`, `tsx`,
 `go`, `rust`, `c`, `cpp`, `csharp`, `java`, `ruby`, `swift`, `kotlin`,
@@ -70,12 +71,8 @@ Done:
 Not yet done (open items from the distribution plan):
 
 - final language selection is still open — 56 are bundled;
-- the Windows build has only been statically verified (see above), not
-  dynamically loaded — needs a real `windows-latest` CI run or a Windows
-  machine to close that gap;
-- CI now builds grammars before testing (`ci.yaml`) and `release.yaml`
-  builds real platform wheels (including Windows), but neither has been run
-  on actual GitHub Actions yet — only validated locally and via Docker;
+- `release.yaml` (wheel building + PyPI publish) hasn't been run for real
+  yet, only `ci.yaml` (build + test);
 - license audit is per-grammar and automated from `provenance.json`, but
   each entry has only been checked against the GitHub-reported SPDX
   license (or the raw LICENSE file text when the API didn't detect one),
