@@ -550,12 +550,15 @@ def clone_source(spec: GrammarSpec) -> Path:
         )
 
     if spec.generate:
-        if not shutil.which("tree-sitter"):
+        # shutil.which (not a bare "tree-sitter" argv[0]) is required on Windows: npm's global
+        # install is a .cmd shim, and subprocess/CreateProcess won't resolve that extension itself.
+        tree_sitter_cli = shutil.which("tree-sitter")
+        if not tree_sitter_cli:
             raise RuntimeError(
                 f"{spec.language}: needs `tree-sitter generate` but the tree-sitter CLI isn't installed "
                 "(npm install -g tree-sitter-cli)"
             )
-        subprocess.run(["tree-sitter", "generate"], cwd=checkout, check=True, timeout=CLONE_TIMEOUT_SECONDS)
+        subprocess.run([tree_sitter_cli, "generate"], cwd=checkout, check=True, timeout=CLONE_TIMEOUT_SECONDS)
 
     return checkout
 
