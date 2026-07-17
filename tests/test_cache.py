@@ -1,7 +1,7 @@
 import tarfile
 import threading
 
-from semble_grammars._cache import extract_atomic
+from semble_grammars.cache import extract_atomic
 
 
 def _make_archive(path, member_name, content):

@@ -8,7 +8,7 @@ import tempfile
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-GRAMMARS_DIR = REPO_ROOT / "semble_grammars" / "_grammars"
+GRAMMARS_DIR = REPO_ROOT / "src" / "semble_grammars" / "_grammars"
 DIST_DIR = REPO_ROOT / "dist"
 
 EXCLUDE_DIRS = {".git", ".venv", "dist", "build", "assets", "__pycache__", "tools"}

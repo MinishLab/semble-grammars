@@ -105,8 +105,8 @@ uv.lock
 # value in tracking it — keep provenance.json and THIRD_PARTY_NOTICES.md,
 # which are the small human-readable audit artifacts).
 /assets/
-/semble_grammars/_grammars/*/
-/semble_grammars/_grammars/licenses/
+/src/semble_grammars/_grammars/*/
+/src/semble_grammars/_grammars/licenses/
 
 # poetry
 #   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.

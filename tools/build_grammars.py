@@ -12,7 +12,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 BUILD_DIR = REPO_ROOT / "assets" / "_build"
-GRAMMARS_DIR = REPO_ROOT / "semble_grammars" / "_grammars"
+GRAMMARS_DIR = REPO_ROOT / "src" / "semble_grammars" / "_grammars"
 
 # (host platform tag, docker --platform value, apt-based build image)
 DOCKER_TARGETS = [

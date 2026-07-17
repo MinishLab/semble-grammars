@@ -44,8 +44,10 @@ dev = [
 
 [tool.setuptools]
 license-files = ["LICENSE*"]
+package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
+where = ["src"]
 include = ["semble_grammars*"]
 namespaces = true
 

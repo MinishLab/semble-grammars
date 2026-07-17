@@ -6,9 +6,9 @@ from pathlib import Path
 
 from tree_sitter import Language, Parser
 
-from semble_grammars._cache import cache_dir, extract_atomic
-from semble_grammars._platform import current_platform_tag
+from semble_grammars.cache import cache_dir, extract_atomic
 from semble_grammars.exceptions import LanguageNotFoundError, UnsupportedPlatformError
+from semble_grammars.platform import current_platform_tag
 
 _ALIASES = {
     "py": "python",

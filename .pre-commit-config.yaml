@@ -18,7 +18,7 @@ repos:
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: check-added-large-files
-        # semble_grammars/_grammars/<platform>/bundle.tar.gz holds the compiled
+        # src/semble_grammars/_grammars/<platform>/bundle.tar.gz holds the compiled
         # grammar archive for that platform; raised from the template default
         # of 5000 to give room as the language count grows.
         args: ["--maxkb=20000"]
@@ -41,4 +41,4 @@ repos:
         language: system
         types: [python]
         pass_filenames: false
-        args: [semble_grammars/]
+        args: [src/semble_grammars/]

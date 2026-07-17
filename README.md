@@ -36,7 +36,7 @@ Bundled languages: `python`, `json`, `javascript`, `typescript`, `tsx`,
 `properties`, `gitignore`, `make`, `cmake`, `nix`, `xml`, `dtd`,
 `markdown`, `markdown_inline`, `zig`, `solidity`, `julia`, `clojure`,
 `jsonnet` (41 MIT, 3 Apache-2.0, 1 CC0-1.0 — see
-`semble_grammars/_grammars/provenance.json` and `THIRD_PARTY_NOTICES.md`).
+`src/semble_grammars/_grammars/provenance.json` and `THIRD_PARTY_NOTICES.md`).
 Selection heuristic: repo-frequency value (config/build formats and major
 languages first) weighed against build cost (single grammar repo, plain C
 sources, no codegen step needed); niche/narrow-audience grammars (verilog,
@@ -57,7 +57,7 @@ Done:
   `SEMBLE_GRAMMARS_CACHE_DIR`);
 - no network access at import or parse time;
 - grammars built from pinned upstream commits with license/provenance
-  metadata (`semble_grammars/_grammars/provenance.json`,
+  metadata (`src/semble_grammars/_grammars/provenance.json`,
   `THIRD_PARTY_NOTICES.md`), reproducible via `tools/build_grammars.py`,
   including cross-compiled Linux builds via Docker;
 - one platform-tagged wheel per architecture (`tools/build_wheels.py`), so a
@@ -103,7 +103,7 @@ uv run python tools/build_grammars.py --all    # host + Linux (Docker) + Windows
 
 This shallow-fetches each grammar repository at a pinned tag, compiles it
 with `clang`, and writes the compiled archive, manifest, and license files
-under `semble_grammars/_grammars/`. `--all` additionally cross-builds the
+under `src/semble_grammars/_grammars/`. `--all` additionally cross-builds the
 Linux archives inside `debian:bookworm-slim` containers (requires a running
 Docker daemon) and, if `x86_64-w64-mingw32-gcc` is on `PATH`, the Windows
 archive (`brew install mingw-w64` on macOS).
@@ -115,5 +115,5 @@ uv run python tools/build_wheels.py
 ```
 
 This produces `dist/semble_grammars-<version>-py3-none-<platform tag>.whl`
-for each platform found under `semble_grammars/_grammars/`, each containing
+for each platform found under `src/semble_grammars/_grammars/`, each containing
 only that platform's archive.

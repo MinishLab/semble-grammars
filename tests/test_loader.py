@@ -51,16 +51,16 @@ def test_every_bundled_language_loads_and_parses(name):
 
 
 def test_extraction_reuses_cache_on_second_call():
-    from semble_grammars import _cache, _loader
-    from semble_grammars._platform import current_platform_tag
+    from semble_grammars import cache, loader
+    from semble_grammars.platform import current_platform_tag
 
     get_parser("python")
-    manifest = _loader._platform_manifest()
+    manifest = loader._platform_manifest()
     filename = manifest["languages"]["python"]["file"]
-    dest = _cache.cache_dir() / current_platform_tag() / filename
+    dest = cache.cache_dir() / current_platform_tag() / filename
     first_mtime = dest.stat().st_mtime_ns
 
-    _loader.get_language.cache_clear()
+    loader.get_language.cache_clear()
     get_parser("python")
     assert dest.stat().st_mtime_ns == first_mtime
 
