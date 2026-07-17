@@ -1,3 +1,4 @@
+import hashlib
 import os
 import tarfile
 import tempfile
@@ -21,37 +22,35 @@ def cache_dir() -> Path:
     return base / "semble" / "grammars" / __version__
 
 
-def extract_atomic(archive_path: Path, member_name: str, dest_path: Path) -> None:
-    """Extract a single member from a tar archive into ``dest_path`` atomically.
+def _sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as file:
+        for chunk in iter(lambda: file.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
-    If ``dest_path`` already exists, extraction is skipped. Concurrent callers
-    each extract to a unique temporary file in the same directory and rename
-    it into place with :func:`os.replace`, which is atomic, so interrupted or
-    racing extractions cannot leave a corrupt or partially written file at
-    ``dest_path``.
-    """
-    if dest_path.exists():
+
+def extract_atomic(archive_path: Path, member_name: str, dest_path: Path, expected_sha256: str) -> None:
+    """Extract and verify one archive member atomically."""
+    if dest_path.is_file() and _sha256(dest_path) == expected_sha256:
         return
     dest_path.parent.mkdir(parents=True, exist_ok=True)
 
     fd, tmp_name = tempfile.mkstemp(dir=dest_path.parent, prefix=f".{dest_path.name}.")
     try:
-        with tarfile.open(archive_path, "r:gz") as tar:
+        with os.fdopen(fd, "wb") as dest, tarfile.open(archive_path, "r:gz") as tar:
             source = tar.extractfile(member_name)
             if source is None:
                 raise KeyError(f"{member_name!r} not found in archive {archive_path}")
-            with os.fdopen(fd, "wb") as dest:
-                dest.write(source.read())
+            while chunk := source.read(1024 * 1024):
+                dest.write(chunk)
+        if _sha256(Path(tmp_name)) != expected_sha256:
+            raise ValueError(f"Checksum mismatch for {member_name!r} in {archive_path}")
         os.chmod(tmp_name, 0o755)
         try:
             os.replace(tmp_name, dest_path)
         except OSError:
-            # Unlike POSIX, Windows can transiently deny a rename onto a path
-            # another thread is simultaneously replacing (mandatory file
-            # locking, not just advisory). If dest_path exists by now, some
-            # other racing caller's replace already won and produced an
-            # equally valid file, so this isn't a real failure.
-            if not dest_path.exists():
+            if not dest_path.is_file() or _sha256(dest_path) != expected_sha256:
                 raise
     finally:
         Path(tmp_name).unlink(missing_ok=True)

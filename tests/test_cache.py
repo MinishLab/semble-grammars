@@ -1,3 +1,4 @@
+import hashlib
 import tarfile
 import threading
 
@@ -11,29 +12,32 @@ def _make_archive(path, member_name, content):
         tar.add(data_path, arcname=member_name)
 
 
-def test_extract_atomic_is_idempotent(tmp_path):
+def test_extract_atomic_replaces_corrupt_cache_file(tmp_path):
     archive = tmp_path / "bundle.tar.gz"
-    _make_archive(archive, "grammar.bin", b"grammar-bytes")
+    content = b"grammar-bytes"
+    checksum = hashlib.sha256(content).hexdigest()
+    _make_archive(archive, "grammar.bin", content)
     dest = tmp_path / "cache" / "grammar.bin"
 
-    extract_atomic(archive, "grammar.bin", dest)
-    assert dest.read_bytes() == b"grammar-bytes"
-
+    extract_atomic(archive, "grammar.bin", dest, checksum)
     dest.write_bytes(b"corrupted")
-    extract_atomic(archive, "grammar.bin", dest)
-    assert dest.read_bytes() == b"corrupted"  # existing file is left untouched
+    extract_atomic(archive, "grammar.bin", dest, checksum)
+
+    assert dest.read_bytes() == content
 
 
 def test_extract_atomic_survives_concurrent_first_use(tmp_path):
     archive = tmp_path / "bundle.tar.gz"
-    _make_archive(archive, "grammar.bin", b"grammar-bytes" * 1000)
+    content = b"grammar-bytes" * 1000
+    checksum = hashlib.sha256(content).hexdigest()
+    _make_archive(archive, "grammar.bin", content)
     dest = tmp_path / "cache" / "grammar.bin"
 
     errors = []
 
     def worker():
         try:
-            extract_atomic(archive, "grammar.bin", dest)
+            extract_atomic(archive, "grammar.bin", dest, checksum)
         except Exception as exc:  # noqa: BLE001
             errors.append(exc)
 
@@ -44,4 +48,4 @@ def test_extract_atomic_survives_concurrent_first_use(tmp_path):
         t.join()
 
     assert not errors
-    assert dest.read_bytes() == b"grammar-bytes" * 1000
+    assert dest.read_bytes() == content

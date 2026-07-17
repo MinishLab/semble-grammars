@@ -8,16 +8,15 @@ import tempfile
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-GRAMMARS_DIR = REPO_ROOT / "src" / "semble_grammars" / "_grammars"
+GRAMMARS_DIR = REPO_ROOT / "src" / "semble_grammars" / "grammars"
 DIST_DIR = REPO_ROOT / "dist"
 
 EXCLUDE_DIRS = {".git", ".venv", "dist", "build", "assets", "__pycache__", "tools"}
-SHARED_GRAMMAR_ENTRIES = {"licenses", "provenance.json", "THIRD_PARTY_NOTICES.md"}
 
 
 def discover_platforms() -> list[str]:
-    """Return the platform tags that have a built manifest under `_grammars/`."""
-    return sorted(p.name for p in GRAMMARS_DIR.iterdir() if p.is_dir() and p.name not in SHARED_GRAMMAR_ENTRIES)
+    """Return platform tags that have a built manifest."""
+    return sorted(path.parent.name for path in GRAMMARS_DIR.glob("*/manifest.json"))
 
 
 def copy_pruned_repo(target_platform: str, dest: Path) -> None:
@@ -52,7 +51,7 @@ if __name__ == "__main__":
     DIST_DIR.mkdir(exist_ok=True)
     platforms = discover_platforms()
     if not platforms:
-        print("no platform grammar archives found under semble_grammars/_grammars/", file=sys.stderr)
+        print("no platform grammar archives found under semble_grammars/grammars/", file=sys.stderr)
         sys.exit(1)
 
     for target in platforms:

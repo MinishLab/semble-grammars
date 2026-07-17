@@ -12,15 +12,9 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 BUILD_DIR = REPO_ROOT / "assets" / "_build"
-GRAMMARS_DIR = REPO_ROOT / "src" / "semble_grammars" / "_grammars"
+GRAMMARS_DIR = REPO_ROOT / "src" / "semble_grammars" / "grammars"
 
-# (host platform tag, docker --platform value, apt-based build image)
-# debian:bookworm-slim's glibc (2.36) is too old for the tree-sitter-cli
-# prebuilt binary (needs GLIBC_2.39+, per npm install failure inside the
-# container), so the build image uses trixie instead. This only affects the
-# *build* environment's glibc; the compiled grammars are plain C and don't
-# pick up newer glibc-versioned symbols, so the manylinux2014 wheel tag
-# (glibc>=2.17) still holds for what actually ships.
+# tree-sitter-cli requires the glibc version provided by Debian trixie.
 DOCKER_TARGETS = [
     ("linux-x86_64", "linux/amd64", "debian:trixie-slim"),
     ("linux-arm64", "linux/arm64", "debian:trixie-slim"),
@@ -340,9 +334,6 @@ GRAMMARS = [
         spdx_license="Apache-2.0",
         sources=["src/parser.c", "src/scanner.c"],
     ),
-    # sql (DerekStride/tree-sitter-sql) skipped: its tagged releases don't commit a
-    # generated src/parser.c, only grammar.js + scanner.c. Adding it needs a
-    # `tree-sitter generate` codegen step this build script doesn't have yet.
     GrammarSpec(
         language="vue",
         repository="https://github.com/tree-sitter-grammars/tree-sitter-vue",
@@ -551,8 +542,6 @@ def clone_source(spec: GrammarSpec) -> Path:
         )
 
     if spec.generate:
-        # shutil.which (not a bare "tree-sitter" argv[0]) is required on Windows: npm's global
-        # install is a .cmd shim, and subprocess/CreateProcess won't resolve that extension itself.
         tree_sitter_cli = shutil.which("tree-sitter")
         if not tree_sitter_cli:
             raise RuntimeError(
@@ -632,7 +621,6 @@ def build_bundle(plat: str, ext: str, compiler: list[str]) -> None:
     manifest = {
         "platform": plat,
         "archive": archive_path.name,
-        "archive_sha256": sha256(archive_path),
         "languages": manifest_languages,
     }
     (plat_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
@@ -645,15 +633,7 @@ WINDOWS_CROSS_COMPILER = "x86_64-w64-mingw32-gcc"
 
 
 def _native_compiler() -> list[str]:
-    """Return the compiler to build for the host platform with.
-
-    Plain ``clang`` on Windows targets MSVC by default, which rejects the
-    GNU-style flags (``-fPIC``, ``-shared``) this build uses and doesn't
-    export symbols the way ctypes expects without extra ``__declspec``
-    annotations we can't add to third-party grammar sources. MinGW-w64 gcc
-    (``choco install mingw``) behaves like the Unix toolchains and is the
-    same compiler already proven to work via cross-compilation.
-    """
+    """Return a suitable compiler for the host platform."""
     if platform.system() != "Windows":
         return ["clang"]
     for candidate in ("gcc", WINDOWS_CROSS_COMPILER):
@@ -692,9 +672,10 @@ def write_third_party_notices(provenance: dict[str, dict]) -> None:
     ]
     for language in sorted(provenance):
         entry = provenance[language]
-        lines.append(
-            f"| {language} | {entry['repository']} | `{entry['commit']}` ({entry['ref']}) | {entry['spdx_license']} |"
-        )
+        revision = f"`{entry['commit']}`"
+        if entry["ref"]:
+            revision += f" ({entry['ref']})"
+        lines.append(f"| {language} | {entry['repository']} | {revision} | {entry['spdx_license']} |")
     lines.append("")
     lines.append("Grammars are compiled from these pinned commits with no source modifications.")
     (GRAMMARS_DIR / "THIRD_PARTY_NOTICES.md").write_text("\n".join(lines) + "\n")

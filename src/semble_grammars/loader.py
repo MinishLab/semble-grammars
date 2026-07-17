@@ -1,5 +1,6 @@
 import ctypes
 import json
+import tarfile
 from functools import lru_cache
 from importlib import resources
 from pathlib import Path
@@ -10,10 +11,7 @@ from semble_grammars.cache import cache_dir, extract_atomic
 from semble_grammars.exceptions import GrammarLoadError, LanguageNotFoundError, UnsupportedPlatformError
 from semble_grammars.platform import current_platform_tag
 
-# Keeps every dlopen'd grammar library resident for the life of the process.
-# ctypes.CDLL has no __del__ and never dlclose()s on GC, so this isn't strictly
-# required for correctness today, but pinning it explicitly means Language
-# validity doesn't depend on that being ctypes' behavior forever.
+# Keep native libraries resident while their Language objects are in use.
 _loaded_libraries: dict[Path, ctypes.CDLL] = {}
 
 _ALIASES = {
@@ -23,15 +21,10 @@ _ALIASES = {
 }
 
 
-def canonical_name(name: str) -> str:
-    """Resolve a language name or alias to its canonical manifest name."""
-    return _ALIASES.get(name, name)
-
-
 @lru_cache(maxsize=1)
 def _platform_manifest() -> dict:
     plat = current_platform_tag()
-    grammars_dir = resources.files("semble_grammars") / "_grammars" / plat
+    grammars_dir = resources.files("semble_grammars") / "grammars" / plat
     manifest_path = grammars_dir / "manifest.json"
     if not manifest_path.is_file():
         raise UnsupportedPlatformError(f"No bundled grammar archive for platform {plat!r}")
@@ -45,16 +38,22 @@ def available_languages() -> list[str]:
 
 def _extracted_library_path(manifest: dict, entry: dict) -> Path:
     plat = manifest["platform"]
-    grammars_dir = resources.files("semble_grammars") / "_grammars" / plat
+    grammars_dir = resources.files("semble_grammars") / "grammars" / plat
     archive_path = Path(str(grammars_dir / manifest["archive"]))
     dest_path = cache_dir() / plat / entry["file"]
 
-    extract_atomic(archive_path, entry["file"], dest_path)
+    try:
+        extract_atomic(archive_path, entry["file"], dest_path, entry["sha256"])
+    except (KeyError, OSError, tarfile.TarError, ValueError) as exc:
+        raise GrammarLoadError(f"Failed to extract {entry['file']!r} from the bundled archive") from exc
     return dest_path
 
 
 def _load_capsule(lib_path: Path, symbol: str) -> object:
-    lib = ctypes.CDLL(str(lib_path))
+    try:
+        lib = ctypes.CDLL(str(lib_path))
+    except OSError as exc:
+        raise GrammarLoadError(f"Failed to load {lib_path.name}") from exc
     _loaded_libraries[lib_path] = lib
 
     try:
@@ -81,7 +80,7 @@ def get_language(name: str) -> Language:
     :raises LanguageNotFoundError: if ``name`` is not in the bundled manifest.
     :returns: the loaded tree-sitter language.
     """
-    language = canonical_name(name)
+    language = _ALIASES.get(name, name)
     manifest = _platform_manifest()
     entry = manifest["languages"].get(language)
     if entry is None:

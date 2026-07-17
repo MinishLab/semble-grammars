@@ -2,7 +2,16 @@ import socket
 
 import pytest
 
-from semble_grammars import GrammarLoadError, LanguageNotFoundError, available_languages, get_parser
+from semble_grammars import (
+    GrammarLoadError,
+    LanguageNotFoundError,
+    available_languages,
+    cache,
+    get_language,
+    get_parser,
+    loader,
+)
+from semble_grammars.platform import current_platform_tag
 
 
 @pytest.mark.parametrize(
@@ -36,8 +45,6 @@ def test_get_parser_parses_bundled_languages(name, source, expect_error):
 
 
 def test_terraform_is_an_alias_for_hcl():
-    from semble_grammars import get_language
-
     assert get_language("terraform") == get_language("hcl")
 
 
@@ -60,9 +67,6 @@ def test_every_bundled_language_loads_and_parses(name):
 
 
 def test_extraction_reuses_cache_on_second_call():
-    from semble_grammars import cache, loader
-    from semble_grammars.platform import current_platform_tag
-
     get_parser("python")
     manifest = loader._platform_manifest()
     filename = manifest["languages"]["python"]["file"]
@@ -75,9 +79,6 @@ def test_extraction_reuses_cache_on_second_call():
 
 
 def test_load_capsule_raises_on_missing_symbol():
-    from semble_grammars import cache, loader
-    from semble_grammars.platform import current_platform_tag
-
     get_parser("python")
     manifest = loader._platform_manifest()
     filename = manifest["languages"]["python"]["file"]

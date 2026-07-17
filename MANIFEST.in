@@ -1,3 +1,1 @@
 recursive-exclude tests *
-recursive-exclude assets *
-exclude uv.lock

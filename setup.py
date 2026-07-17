@@ -3,11 +3,7 @@ import os
 from setuptools import setup
 from setuptools.command.bdist_wheel import bdist_wheel as _bdist_wheel
 
-# semble_grammars ships a compiled grammar archive per platform, so unlike a
-# normal pure-Python package it needs a platform-specific wheel tag: a Linux
-# user must not download the macOS archive. tools/build_wheels.py builds one
-# wheel per platform by setting SEMBLE_GRAMMARS_WHEEL_PLATFORM and pruning
-# the source tree down to that platform's grammar directory beforehand.
+# The bundled native libraries require platform-specific wheels.
 PLATFORM_WHEEL_TAGS = {
     "macos-arm64": "macosx_11_0_arm64",
     "macos-x86_64": "macosx_10_13_x86_64",
