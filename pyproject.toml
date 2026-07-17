@@ -1,16 +1,16 @@
 [build-system]
-requires = ["setuptools>=64", "setuptools_scm>=8"]
+requires = ["setuptools>=64", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "PACKAGE"
-description = "DESCRIPTION"
-authors = [{name = "NAME", email = "EMAIL"}]
+name = "semble-grammars"
+description = "Locally-cached tree-sitter grammar bundle for Semble, with no runtime downloads."
+authors = [{name = "MinishLab", email = "info@minishlab.com"}]
 readme = { file = "README.md", content-type = "text/markdown" }
 dynamic = ["version"]
 license = { file = "LICENSE" }
 requires-python = ">=3.10"
-keywords = []
+keywords = ["tree-sitter", "grammars", "parsing", "semble"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -24,6 +24,7 @@ classifiers = [
 ]
 
 dependencies = [
+    "tree-sitter>=0.21,<1.0",
 ]
 
 [project.optional-dependencies]
@@ -37,19 +38,19 @@ dev = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/MinishLab/PACKAGE"
-"Bug Reports" = "https://github.com/MinishLab/PACKAGE/issues"
-"Source" = "https://github.com/MinishLab/PACKAGE"
+"Homepage" = "https://github.com/MinishLab/semble-grammars"
+"Bug Reports" = "https://github.com/MinishLab/semble-grammars/issues"
+"Source" = "https://github.com/MinishLab/semble-grammars"
 
 [tool.setuptools]
-packages = ["PACKAGE"]
+packages = ["semble_grammars"]
 license-files = ["LICENSE*"]
 
-[tool.setuptools_scm]
-# can be empty if no extra settings are needed, presence enables setuptools_scm
+[tool.setuptools.package-data]
+semble_grammars = ["_grammars/**/*"]
 
 [tool.setuptools.dynamic]
-version = {attr = "PACKAGE.version.__version__"}
+version = {attr = "semble_grammars.version.__version__"}
 
 [tool.ruff]
 exclude = [".venv/"]
@@ -57,7 +58,8 @@ line-length = 120
 target-version = "py310"
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**" = ["ANN"]
+"tests/**" = ["ANN", "D"]
+"tools/**" = ["T20"]
 
 [tool.ruff.lint]
 select = [
@@ -100,7 +102,7 @@ ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = ["--tb=short", "--strict-markers", "--cov=PACKAGE", "--cov-report=term-missing"]
+addopts = ["--tb=short", "--strict-markers", "--cov=semble_grammars", "--cov-report=term-missing"]
 
 [tool.coverage.run]
 relative_files = true
