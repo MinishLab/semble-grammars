@@ -1,4 +1,4 @@
-name: Run tests and upload coverage
+name: CI
 
 on:
   push:
@@ -7,67 +7,97 @@ on:
   pull_request:
 
 jobs:
-  test:
-    name: Run tests with pytest
-    runs-on: ${{ matrix.os }}
+  quality:
+    name: Run quality checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.13"
+
+      - uses: astral-sh/setup-uv@d0d8abe699bfb85fec6de9f7adb5ae17292296ff
+
+      - run: uv sync --all-extras
+
+      - run: |
+          make lint
+          make typecheck
+
+  build-linux:
+    name: Build Linux grammars
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.13"
+
+      - uses: astral-sh/setup-uv@d0d8abe699bfb85fec6de9f7adb5ae17292296ff
+
+      - run: npm install -g tree-sitter-cli
+
+      - run: uv run --no-project python scripts/build_grammars.py
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: grammar-linux
+          path: src/semble_grammars/grammars
+
+  test-linux:
+    name: Test Linux (Python ${{ matrix.python-version }})
+    needs: build-linux
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        os: ["ubuntu-latest", "macos-latest", "windows-latest"]
         python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
 
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
 
-      - name: Set up Python ${{ matrix.python-version }} on ${{ matrix.os }}
-        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@d0d8abe699bfb85fec6de9f7adb5ae17292296ff
+      - uses: astral-sh/setup-uv@d0d8abe699bfb85fec6de9f7adb5ae17292296ff
 
-      - name: Create virtual environment
-        run: uv venv .venv
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: grammar-linux
+          path: src/semble_grammars/grammars
 
-      - name: Add venv to PATH
-        shell: bash
-        run: |
-          echo "VIRTUAL_ENV=.venv" >> $GITHUB_ENV
-          if [ "$RUNNER_OS" = "Windows" ]; then
-            echo "$PWD/.venv/Scripts" >> $GITHUB_PATH
-          else
-            echo "$PWD/.venv/bin" >> $GITHUB_PATH
-          fi
+      - run: uv sync --all-extras
 
-      - name: Install dependencies
-        shell: bash
-        run: uv sync --all-extras
+      - run: make test
 
-      - name: Run quality checks
-        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.13'
-        shell: bash
-        run: |
-          make lint
-          make typecheck
-
-      - name: Install tree-sitter CLI
-        shell: bash
-        run: npm install -g tree-sitter-cli
-
-      - name: Install MinGW-w64 (Windows only)
-        if: runner.os == 'Windows'
-        run: choco install mingw --no-progress -y
-
-      - name: Build grammar bundle for this runner's platform
-        shell: bash
-        run: uv run python scripts/build_grammars.py
-
-      - name: Run tests under coverage
-        shell: bash
-        run: make test
-
-      - name: Upload results to Codecov
+      - if: matrix.python-version == '3.13'
         uses: codecov/codecov-action@b9fd7d16f6d7d1b5d2bec1a2887e65ceed900238
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+
+  test-windows:
+    name: Build and test Windows
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.13"
+
+      - uses: astral-sh/setup-uv@d0d8abe699bfb85fec6de9f7adb5ae17292296ff
+
+      - run: npm install -g tree-sitter-cli
+
+      - run: choco install mingw --no-progress -y
+
+      - shell: bash
+        run: uv run --no-project python scripts/build_grammars.py
+
+      - run: uv sync --all-extras
+
+      - shell: bash
+        run: make test
