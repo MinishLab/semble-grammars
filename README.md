@@ -30,9 +30,9 @@ Build grammars from the pinned sources in
 [`provenance.json`](src/semble_grammars/grammars/provenance.json):
 
 ```bash
-uv run python tools/build_grammars.py           # current platform
-uv run python tools/build_grammars.py --windows # Windows via mingw-w64
-uv run python tools/build_grammars.py --all     # current, Linux, and Windows
+uv run python scripts/build_grammars.py           # current platform
+uv run python scripts/build_grammars.py --windows # Windows via mingw-w64
+uv run python scripts/build_grammars.py --all     # current, Linux, and Windows
 ```
 
 This requires a C compiler, Git, and the tree-sitter CLI (`npm install -g
@@ -40,5 +40,5 @@ tree-sitter-cli`). Linux cross-builds also require Docker. Build the available
 platform archives into wheels with:
 
 ```bash
-uv run python tools/build_wheels.py
+uv run python scripts/build_wheels.py
 ```

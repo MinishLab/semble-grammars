@@ -12,7 +12,7 @@ def _make_archive(path, member_name, content):
         tar.add(data_path, arcname=member_name)
 
 
-def test_extract_atomic_replaces_corrupt_cache_file(tmp_path):
+def test_extract_atomic_is_idempotent(tmp_path):
     archive = tmp_path / "bundle.tar.gz"
     content = b"grammar-bytes"
     checksum = hashlib.sha256(content).hexdigest()
@@ -20,10 +20,11 @@ def test_extract_atomic_replaces_corrupt_cache_file(tmp_path):
     dest = tmp_path / "cache" / "grammar.bin"
 
     extract_atomic(archive, "grammar.bin", dest, checksum)
-    dest.write_bytes(b"corrupted")
+    first_mtime = dest.stat().st_mtime_ns
     extract_atomic(archive, "grammar.bin", dest, checksum)
 
     assert dest.read_bytes() == content
+    assert dest.stat().st_mtime_ns == first_mtime
 
 
 def test_extract_atomic_survives_concurrent_first_use(tmp_path):

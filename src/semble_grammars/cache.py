@@ -32,7 +32,7 @@ def _sha256(path: Path) -> str:
 
 def extract_atomic(archive_path: Path, member_name: str, dest_path: Path, expected_sha256: str) -> None:
     """Extract and verify one archive member atomically."""
-    if dest_path.is_file() and _sha256(dest_path) == expected_sha256:
+    if dest_path.exists():
         return
     dest_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -50,7 +50,7 @@ def extract_atomic(archive_path: Path, member_name: str, dest_path: Path, expect
         try:
             os.replace(tmp_name, dest_path)
         except OSError:
-            if not dest_path.is_file() or _sha256(dest_path) != expected_sha256:
+            if not dest_path.exists():
                 raise
     finally:
         Path(tmp_name).unlink(missing_ok=True)

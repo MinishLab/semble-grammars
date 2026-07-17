@@ -11,7 +11,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 GRAMMARS_DIR = REPO_ROOT / "src" / "semble_grammars" / "grammars"
 DIST_DIR = REPO_ROOT / "dist"
 
-EXCLUDE_DIRS = {".git", ".venv", "dist", "build", "assets", "__pycache__", "tools"}
+EXCLUDE_DIRS = {".git", ".venv", "dist", "build", "assets", "__pycache__", "scripts"}
 
 
 def discover_platforms() -> list[str]:

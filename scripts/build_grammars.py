@@ -688,7 +688,7 @@ def build_via_docker(expected_platform: str, docker_platform: str, image: str) -
         "apt-get update -qq && "
         "apt-get install -y -qq clang git ca-certificates python3 nodejs npm > /dev/null && "
         "npm install -g --silent tree-sitter-cli > /dev/null && "
-        "python3 tools/build_grammars.py --native"
+        "python3 scripts/build_grammars.py --native"
     )
     subprocess.run(
         [

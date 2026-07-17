@@ -17,7 +17,7 @@ test:
 
 lint:
 	uv run ruff check .
-	uv run pydoclint src/semble_grammars/ tools/ setup.py
+	uv run pydoclint src/semble_grammars/ scripts/ setup.py
 
 typecheck:
-	uv run mypy src/semble_grammars/ tools/ setup.py
+	uv run mypy src/semble_grammars/ scripts/ setup.py

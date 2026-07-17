@@ -17,13 +17,13 @@ jobs:
         run: npm install -g tree-sitter-cli
 
       - name: Build grammar bundle for macos-arm64
-        run: uv run python tools/build_grammars.py
+        run: uv run python scripts/build_grammars.py
 
       - name: Build platform wheel
-        run: uv run python tools/build_wheels.py
+        run: uv run python scripts/build_wheels.py
 
       - name: Smoke test built wheel
-        run: uv run --with $(ls dist/*.whl) --no-project python tools/smoke_test.py
+        run: uv run --with $(ls dist/*.whl) --no-project python scripts/smoke_test.py
 
       - name: Upload dist
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -44,15 +44,15 @@ jobs:
         run: npm install -g tree-sitter-cli
 
       - name: Build grammar bundles for linux-x86_64 and linux-arm64
-        run: uv run python tools/build_grammars.py --all
+        run: uv run python scripts/build_grammars.py --all
 
       - name: Build platform wheels
-        run: uv run python tools/build_wheels.py
+        run: uv run python scripts/build_wheels.py
 
       - name: Smoke test linux-x86_64 wheel
         # Only the x86_64 wheel is tested here: this runner is x86_64, and the
         # arm64 wheel would need emulation (QEMU/Docker) to actually load.
-        run: uv run --with dist/*manylinux2014_x86_64.whl --no-project python tools/smoke_test.py
+        run: uv run --with dist/*manylinux2014_x86_64.whl --no-project python scripts/smoke_test.py
 
       - name: Upload dist
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -78,15 +78,15 @@ jobs:
 
       - name: Build grammar bundle for windows-x86_64
         shell: bash
-        run: uv run python tools/build_grammars.py
+        run: uv run python scripts/build_grammars.py
 
       - name: Build platform wheel
         shell: bash
-        run: uv run python tools/build_wheels.py
+        run: uv run python scripts/build_wheels.py
 
       - name: Smoke test built wheel
         shell: bash
-        run: uv run --with $(ls dist/*.whl) --no-project python tools/smoke_test.py
+        run: uv run --with $(ls dist/*.whl) --no-project python scripts/smoke_test.py
 
       - name: Upload dist
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
