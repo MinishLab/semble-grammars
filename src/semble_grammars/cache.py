@@ -43,6 +43,15 @@ def extract_atomic(archive_path: Path, member_name: str, dest_path: Path) -> Non
             with os.fdopen(fd, "wb") as dest:
                 dest.write(source.read())
         os.chmod(tmp_name, 0o755)
-        os.replace(tmp_name, dest_path)
+        try:
+            os.replace(tmp_name, dest_path)
+        except OSError:
+            # Unlike POSIX, Windows can transiently deny a rename onto a path
+            # another thread is simultaneously replacing (mandatory file
+            # locking, not just advisory). If dest_path exists by now, some
+            # other racing caller's replace already won and produced an
+            # equally valid file, so this isn't a real failure.
+            if not dest_path.exists():
+                raise
     finally:
         Path(tmp_name).unlink(missing_ok=True)

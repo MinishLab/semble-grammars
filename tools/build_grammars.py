@@ -519,6 +519,7 @@ def sha256(path: Path) -> str:
 
 
 CLONE_TIMEOUT_SECONDS = 60
+GENERATE_TIMEOUT_SECONDS = 180
 
 
 def clone_source(spec: GrammarSpec) -> Path:
@@ -558,7 +559,7 @@ def clone_source(spec: GrammarSpec) -> Path:
                 f"{spec.language}: needs `tree-sitter generate` but the tree-sitter CLI isn't installed "
                 "(npm install -g tree-sitter-cli)"
             )
-        subprocess.run([tree_sitter_cli, "generate"], cwd=checkout, check=True, timeout=CLONE_TIMEOUT_SECONDS)
+        subprocess.run([tree_sitter_cli, "generate"], cwd=checkout, check=True, timeout=GENERATE_TIMEOUT_SECONDS)
 
     return checkout
 
