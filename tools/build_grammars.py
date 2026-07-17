@@ -637,12 +637,30 @@ def build_bundle(plat: str, ext: str, compiler: list[str]) -> None:
     print(f"wrote {archive_path} ({archive_path.stat().st_size} bytes)", file=sys.stderr)
 
 
+WINDOWS_CROSS_COMPILER = "x86_64-w64-mingw32-gcc"
+
+
+def _native_compiler() -> list[str]:
+    """Return the compiler to build for the host platform with.
+
+    Plain ``clang`` on Windows targets MSVC by default, which rejects the
+    GNU-style flags (``-fPIC``, ``-shared``) this build uses and doesn't
+    export symbols the way ctypes expects without extra ``__declspec``
+    annotations we can't add to third-party grammar sources. MinGW-w64 gcc
+    (``choco install mingw``) behaves like the Unix toolchains and is the
+    same compiler already proven to work via cross-compilation.
+    """
+    if platform.system() != "Windows":
+        return ["clang"]
+    for candidate in ("gcc", WINDOWS_CROSS_COMPILER):
+        if shutil.which(candidate):
+            return [candidate]
+    raise RuntimeError("no MinGW-w64 gcc found on PATH for a native Windows build (choco install mingw)")
+
+
 def build_native() -> None:
     """Build the grammar bundle for the current (host) platform."""
-    build_bundle(detect_platform(), dylib_extension(), ["clang"])
-
-
-WINDOWS_CROSS_COMPILER = "x86_64-w64-mingw32-gcc"
+    build_bundle(detect_platform(), dylib_extension(), _native_compiler())
 
 
 def build_windows_cross() -> None:

@@ -73,6 +73,9 @@ jobs:
         shell: bash
         run: npm install -g tree-sitter-cli
 
+      - name: Install MinGW-w64
+        run: choco install mingw --no-progress -y
+
       - name: Build grammar bundle for windows-x86_64
         shell: bash
         run: uv run python tools/build_grammars.py

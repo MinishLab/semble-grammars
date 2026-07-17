@@ -49,6 +49,10 @@ jobs:
         shell: bash
         run: npm install -g tree-sitter-cli
 
+      - name: Install MinGW-w64 (Windows only)
+        if: runner.os == 'Windows'
+        run: choco install mingw --no-progress -y
+
       - name: Build grammar bundle for this runner's platform
         shell: bash
         run: uv run python tools/build_grammars.py
