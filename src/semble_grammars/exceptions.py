@@ -1,14 +1,10 @@
-class SembleGrammarsError(Exception):
-    """Base class for all semble-grammars errors."""
-
-
-class UnsupportedPlatformError(SembleGrammarsError):
+class UnsupportedPlatformError(Exception):
     """No compiled grammar bundle is available for the current platform."""
 
 
-class LanguageNotFoundError(SembleGrammarsError):
+class LanguageNotFoundError(Exception):
     """The requested language is not present in the bundled manifest."""
 
 
-class GrammarLoadError(SembleGrammarsError):
+class GrammarLoadError(Exception):
     """A bundled native grammar library failed to load or returned an invalid language."""

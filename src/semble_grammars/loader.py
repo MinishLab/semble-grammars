@@ -1,5 +1,6 @@
 import ctypes
 import json
+import platform
 import tarfile
 from functools import lru_cache
 from importlib import resources
@@ -9,7 +10,6 @@ from tree_sitter import Language, Parser
 
 from semble_grammars.cache import cache_dir, extract_atomic
 from semble_grammars.exceptions import GrammarLoadError, LanguageNotFoundError, UnsupportedPlatformError
-from semble_grammars.platform import current_platform_tag
 
 # Keep native libraries resident while their Language objects are in use.
 _loaded_libraries: dict[Path, ctypes.CDLL] = {}
@@ -20,10 +20,21 @@ _ALIASES = {
     "terraform": "hcl",
 }
 
+_OS_NAMES = {"darwin": "macos", "linux": "linux", "windows": "windows"}
+_ARCH_NAMES = {"arm64": "arm64", "aarch64": "arm64", "x86_64": "x86_64", "amd64": "x86_64"}
+
+
+def _platform_tag() -> str:
+    system = platform.system().lower()
+    machine = platform.machine().lower()
+    if system not in _OS_NAMES or machine not in _ARCH_NAMES:
+        raise UnsupportedPlatformError(f"Unsupported platform: system={system!r}, machine={machine!r}")
+    return f"{_OS_NAMES[system]}-{_ARCH_NAMES[machine]}"
+
 
 @lru_cache(maxsize=1)
 def _platform_manifest() -> dict:
-    plat = current_platform_tag()
+    plat = _platform_tag()
     grammars_dir = resources.files("semble_grammars") / "grammars" / plat
     manifest_path = grammars_dir / "manifest.json"
     if not manifest_path.is_file():

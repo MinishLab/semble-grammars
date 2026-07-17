@@ -27,7 +27,7 @@ make typecheck
 ```
 
 Build grammars from the pinned sources in
-[`provenance.json`](src/semble_grammars/grammars/provenance.json):
+[`sources.json`](src/semble_grammars/grammars/sources.json):
 
 ```bash
 uv run python scripts/build_grammars.py           # current platform
