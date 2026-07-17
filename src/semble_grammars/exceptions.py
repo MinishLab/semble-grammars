@@ -8,3 +8,7 @@ class UnsupportedPlatformError(SembleGrammarsError):
 
 class LanguageNotFoundError(SembleGrammarsError):
     """The requested language is not present in the bundled manifest."""
+
+
+class GrammarLoadError(SembleGrammarsError):
+    """A bundled native grammar library failed to load or returned an invalid language."""

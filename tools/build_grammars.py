@@ -15,9 +15,15 @@ BUILD_DIR = REPO_ROOT / "assets" / "_build"
 GRAMMARS_DIR = REPO_ROOT / "src" / "semble_grammars" / "_grammars"
 
 # (host platform tag, docker --platform value, apt-based build image)
+# debian:bookworm-slim's glibc (2.36) is too old for the tree-sitter-cli
+# prebuilt binary (needs GLIBC_2.39+, per npm install failure inside the
+# container), so the build image uses trixie instead. This only affects the
+# *build* environment's glibc; the compiled grammars are plain C and don't
+# pick up newer glibc-versioned symbols, so the manylinux2014 wheel tag
+# (glibc>=2.17) still holds for what actually ships.
 DOCKER_TARGETS = [
-    ("linux-x86_64", "linux/amd64", "debian:bookworm-slim"),
-    ("linux-arm64", "linux/arm64", "debian:bookworm-slim"),
+    ("linux-x86_64", "linux/amd64", "debian:trixie-slim"),
+    ("linux-arm64", "linux/arm64", "debian:trixie-slim"),
 ]
 
 
@@ -31,11 +37,19 @@ class GrammarSpec:
     ref: str
     spdx_license: str
     sources: list[str] = field(default_factory=lambda: ["src/parser.c"])
+    generate: bool = False
+    symbol_override: str | None = None
 
     @property
     def symbol(self) -> str:
-        """Native entry point exported by the compiled grammar."""
-        return f"tree_sitter_{self.language}"
+        """Native entry point exported by the compiled grammar.
+
+        Usually ``tree_sitter_<language>``, but some grammars export a symbol
+        that doesn't match Semble's canonical language name (e.g. the
+        ``csharp`` grammar exports ``tree_sitter_c_sharp``); ``symbol_override``
+        covers those.
+        """
+        return self.symbol_override or f"tree_sitter_{self.language}"
 
 
 GRAMMARS = [
@@ -396,6 +410,92 @@ GRAMMARS = [
         spdx_license="MIT",
         sources=["src/parser.c", "src/scanner.c"],
     ),
+    GrammarSpec(
+        language="sql",
+        repository="https://github.com/DerekStride/tree-sitter-sql",
+        commit="7b51ecda191d36b92f5a90a8d1bc3faef1c7b8b8",
+        ref="v0.3.11",
+        spdx_license="MIT",
+        sources=["src/parser.c", "src/scanner.c"],
+        generate=True,
+    ),
+    GrammarSpec(
+        language="csharp",
+        repository="https://github.com/tree-sitter/tree-sitter-c-sharp",
+        commit="cac6d5fb595f5811a076336682d5d595ac1c9e85",
+        ref="v0.23.5",
+        spdx_license="MIT",
+        sources=["src/parser.c", "src/scanner.c"],
+        symbol_override="tree_sitter_c_sharp",
+    ),
+    GrammarSpec(
+        language="jinja2",
+        repository="https://github.com/dbt-labs/tree-sitter-jinja2",
+        commit="c9b092eff38bd6943254ad0373006d83c100a8c0",
+        ref="v0.2.0",
+        spdx_license="Apache-2.0",
+    ),
+    GrammarSpec(
+        language="json5",
+        repository="https://github.com/Joakker/tree-sitter-json5",
+        commit="8cb4114a4d7e5bab75d74466422e032de31d83df",
+        ref="v0.1.0",
+        spdx_license="MIT",
+    ),
+    GrammarSpec(
+        language="powershell",
+        repository="https://github.com/airbus-cert/tree-sitter-powershell",
+        commit="d398441825243b00e317e87e1829b9d6a3e54ce0",
+        ref="v0.26.5",
+        spdx_license="MIT",
+        sources=["src/parser.c", "src/scanner.c"],
+    ),
+    GrammarSpec(
+        language="scss",
+        repository="https://github.com/serenadeai/tree-sitter-scss",
+        commit="c478c6868648eff49eb04a4df90d703dc45b312a",
+        ref="v1.0.0",
+        spdx_license="MIT",
+        sources=["src/parser.c", "src/scanner.c"],
+    ),
+    GrammarSpec(
+        language="astro",
+        repository="https://github.com/virchau13/tree-sitter-astro",
+        commit="213f6e6973d9b456c6e50e86f19f66877e7ef0ee",
+        ref="",
+        spdx_license="MIT",
+        sources=["src/parser.c", "src/scanner.c"],
+    ),
+    GrammarSpec(
+        language="starlark",
+        repository="https://github.com/tree-sitter-grammars/tree-sitter-starlark",
+        commit="a453dbf3ba433db0e5ec621a38a7e59d72e4dc69",
+        ref="v1.3.0",
+        spdx_license="MIT",
+        sources=["src/parser.c", "src/scanner.c"],
+    ),
+    GrammarSpec(
+        language="gotmpl",
+        repository="https://github.com/ngalaiko/tree-sitter-go-template",
+        commit="aa71f63de226c5592dfbfc1f29949522d7c95fac",
+        ref="",
+        spdx_license="MIT",
+    ),
+    GrammarSpec(
+        language="rst",
+        repository="https://github.com/stsewd/tree-sitter-rst",
+        commit="ab09cab886a947c62a8c6fa94d3ad375f3f6a73d",
+        ref="v0.2.0",
+        spdx_license="MIT",
+        sources=["src/parser.c", "src/scanner.c"],
+    ),
+    GrammarSpec(
+        language="groovy",
+        repository="https://github.com/murtaza64/tree-sitter-groovy",
+        commit="deb0dcf8c4544f07564060f6e9b9f6e4b0bfc27d",
+        ref="",
+        spdx_license="MIT",
+    ),
 ]
 
 
@@ -448,6 +548,15 @@ def clone_source(spec: GrammarSpec) -> Path:
         raise RuntimeError(
             f"{spec.language}: tag {spec.ref!r} now points at {actual_commit}, expected pinned {spec.commit}"
         )
+
+    if spec.generate:
+        if not shutil.which("tree-sitter"):
+            raise RuntimeError(
+                f"{spec.language}: needs `tree-sitter generate` but the tree-sitter CLI isn't installed "
+                "(npm install -g tree-sitter-cli)"
+            )
+        subprocess.run(["tree-sitter", "generate"], cwd=checkout, check=True, timeout=CLONE_TIMEOUT_SECONDS)
+
     return checkout
 
 
@@ -573,7 +682,9 @@ def build_via_docker(expected_platform: str, docker_platform: str, image: str) -
     """Cross-build a Linux grammar bundle inside a Docker container."""
     print(f"building {expected_platform} via docker ({docker_platform}, {image})", file=sys.stderr)
     container_cmd = (
-        "apt-get update -qq && apt-get install -y -qq clang git ca-certificates python3 > /dev/null && "
+        "apt-get update -qq && "
+        "apt-get install -y -qq clang git ca-certificates python3 nodejs npm > /dev/null && "
+        "npm install -g --silent tree-sitter-cli > /dev/null && "
         "python3 tools/build_grammars.py --native"
     )
     subprocess.run(

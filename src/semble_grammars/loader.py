@@ -7,11 +7,19 @@ from pathlib import Path
 from tree_sitter import Language, Parser
 
 from semble_grammars.cache import cache_dir, extract_atomic
-from semble_grammars.exceptions import LanguageNotFoundError, UnsupportedPlatformError
+from semble_grammars.exceptions import GrammarLoadError, LanguageNotFoundError, UnsupportedPlatformError
 from semble_grammars.platform import current_platform_tag
+
+# Keeps every dlopen'd grammar library resident for the life of the process.
+# ctypes.CDLL has no __del__ and never dlclose()s on GC, so this isn't strictly
+# required for correctness today, but pinning it explicitly means Language
+# validity doesn't depend on that being ctypes' behavior forever.
+_loaded_libraries: dict[Path, ctypes.CDLL] = {}
 
 _ALIASES = {
     "py": "python",
+    # Terraform files are valid HCL; there is no separate compiled grammar.
+    "terraform": "hcl",
 }
 
 
@@ -47,9 +55,17 @@ def _extracted_library_path(manifest: dict, entry: dict) -> Path:
 
 def _load_capsule(lib_path: Path, symbol: str) -> object:
     lib = ctypes.CDLL(str(lib_path))
-    entry_point = getattr(lib, symbol)
+    _loaded_libraries[lib_path] = lib
+
+    try:
+        entry_point = getattr(lib, symbol)
+    except AttributeError as exc:
+        raise GrammarLoadError(f"{lib_path.name}: missing expected symbol {symbol!r}") from exc
+
     entry_point.restype = ctypes.c_void_p
     language_ptr = entry_point()
+    if not language_ptr:
+        raise GrammarLoadError(f"{lib_path.name}: {symbol}() returned a null language pointer")
 
     py_capsule_new = ctypes.pythonapi.PyCapsule_New
     py_capsule_new.restype = ctypes.py_object

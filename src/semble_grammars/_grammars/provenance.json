@@ -313,5 +313,82 @@
     "ref": "",
     "spdx_license": "MIT",
     "license_file": "jsonnet-LICENSE.txt"
+  },
+  "sql": {
+    "repository": "https://github.com/DerekStride/tree-sitter-sql",
+    "commit": "7b51ecda191d36b92f5a90a8d1bc3faef1c7b8b8",
+    "ref": "v0.3.11",
+    "spdx_license": "MIT",
+    "license_file": "sql-LICENSE.txt"
+  },
+  "csharp": {
+    "repository": "https://github.com/tree-sitter/tree-sitter-c-sharp",
+    "commit": "cac6d5fb595f5811a076336682d5d595ac1c9e85",
+    "ref": "v0.23.5",
+    "spdx_license": "MIT",
+    "license_file": "csharp-LICENSE.txt"
+  },
+  "jinja2": {
+    "repository": "https://github.com/dbt-labs/tree-sitter-jinja2",
+    "commit": "c9b092eff38bd6943254ad0373006d83c100a8c0",
+    "ref": "v0.2.0",
+    "spdx_license": "Apache-2.0",
+    "license_file": "jinja2-LICENSE.txt"
+  },
+  "json5": {
+    "repository": "https://github.com/Joakker/tree-sitter-json5",
+    "commit": "8cb4114a4d7e5bab75d74466422e032de31d83df",
+    "ref": "v0.1.0",
+    "spdx_license": "MIT",
+    "license_file": "json5-LICENSE.txt"
+  },
+  "powershell": {
+    "repository": "https://github.com/airbus-cert/tree-sitter-powershell",
+    "commit": "d398441825243b00e317e87e1829b9d6a3e54ce0",
+    "ref": "v0.26.5",
+    "spdx_license": "MIT",
+    "license_file": "powershell-LICENSE.txt"
+  },
+  "scss": {
+    "repository": "https://github.com/serenadeai/tree-sitter-scss",
+    "commit": "c478c6868648eff49eb04a4df90d703dc45b312a",
+    "ref": "v1.0.0",
+    "spdx_license": "MIT",
+    "license_file": "scss-LICENSE.txt"
+  },
+  "astro": {
+    "repository": "https://github.com/virchau13/tree-sitter-astro",
+    "commit": "213f6e6973d9b456c6e50e86f19f66877e7ef0ee",
+    "ref": "",
+    "spdx_license": "MIT",
+    "license_file": "astro-LICENSE.txt"
+  },
+  "starlark": {
+    "repository": "https://github.com/tree-sitter-grammars/tree-sitter-starlark",
+    "commit": "a453dbf3ba433db0e5ec621a38a7e59d72e4dc69",
+    "ref": "v1.3.0",
+    "spdx_license": "MIT",
+    "license_file": "starlark-LICENSE.txt"
+  },
+  "gotmpl": {
+    "repository": "https://github.com/ngalaiko/tree-sitter-go-template",
+    "commit": "aa71f63de226c5592dfbfc1f29949522d7c95fac",
+    "ref": "",
+    "spdx_license": "MIT",
+    "license_file": "gotmpl-LICENSE.txt"
+  },
+  "rst": {
+    "repository": "https://github.com/stsewd/tree-sitter-rst",
+    "commit": "ab09cab886a947c62a8c6fa94d3ad375f3f6a73d",
+    "ref": "v0.2.0",
+    "spdx_license": "MIT",
+    "license_file": "rst-LICENSE.txt"
+  },
+  "groovy": {
+    "repository": "https://github.com/murtaza64/tree-sitter-groovy",
+    "commit": "deb0dcf8c4544f07564060f6e9b9f6e4b0bfc27d",
+    "ref": "",
+    "spdx_license": "MIT",
+    "license_file": "groovy-LICENSE.txt"
   }
 }

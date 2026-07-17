@@ -45,6 +45,10 @@ jobs:
         shell: bash
         run: make install
 
+      - name: Install tree-sitter CLI
+        shell: bash
+        run: npm install -g tree-sitter-cli
+
       - name: Build grammar bundle for this runner's platform
         shell: bash
         run: uv run python tools/build_grammars.py

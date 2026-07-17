@@ -16,7 +16,7 @@ tree = parser.parse(b"def hello():\n    print('hi')\n")
 
 ## Status
 
-Working proof of concept, not yet released. It currently bundles 45
+Working proof of concept, not yet released. It currently bundles 56
 grammars for four platforms (`macos-arm64`, `linux-x86_64`, `linux-arm64`,
 `windows-x86_64`), each built into its own platform-tagged wheel. The three
 non-Windows wheels are verified end to end: installed from the built
@@ -30,22 +30,24 @@ install was available in this environment; `release.yaml`'s
 instead, which is untested until that workflow actually runs.
 
 Bundled languages: `python`, `json`, `javascript`, `typescript`, `tsx`,
-`go`, `rust`, `c`, `cpp`, `java`, `ruby`, `swift`, `kotlin`, `scala`,
-`dart`, `lua`, `php`, `php_only`, `elixir`, `html`, `css`, `vue`, `svelte`,
-`graphql`, `proto`, `bash`, `yaml`, `toml`, `dockerfile`, `hcl`, `ini`,
-`properties`, `gitignore`, `make`, `cmake`, `nix`, `xml`, `dtd`,
-`markdown`, `markdown_inline`, `zig`, `solidity`, `julia`, `clojure`,
-`jsonnet` (41 MIT, 3 Apache-2.0, 1 CC0-1.0 — see
+`go`, `rust`, `c`, `cpp`, `csharp`, `java`, `ruby`, `swift`, `kotlin`,
+`scala`, `dart`, `lua`, `php`, `php_only`, `elixir`, `html`, `css`, `scss`,
+`vue`, `svelte`, `astro`, `graphql`, `proto`, `bash`, `powershell`, `yaml`,
+`toml`, `json5`, `dockerfile`, `hcl`, `terraform` (alias for `hcl` — same
+syntax, no separate grammar), `ini`, `properties`, `gitignore`, `make`,
+`cmake`, `nix`, `xml`, `dtd`, `markdown`, `markdown_inline`, `jinja2`,
+`starlark`, `gotmpl`, `rst`, `groovy`, `sql`, `zig`, `solidity`, `julia`,
+`clojure`, `jsonnet` (52 MIT, 3 Apache-2.0, 1 CC0-1.0 — see
 `src/semble_grammars/_grammars/provenance.json` and `THIRD_PARTY_NOTICES.md`).
-Selection heuristic: repo-frequency value (config/build formats and major
-languages first) weighed against build cost (single grammar repo, plain C
-sources, no codegen step needed); niche/narrow-audience grammars (verilog,
-cuda, fish/zsh, perl) were deliberately left out for now, matching the
-distribution plan's own "defer" list.
-`sql` (DerekStride/tree-sitter-sql) was evaluated and skipped: its tagged
-releases don't commit a generated `parser.c`, only `grammar.js` — adding it
-needs a `tree-sitter generate` codegen step the build script doesn't have
-yet.
+
+Selection heuristic: value is judged by how often a format actually shows
+up across arbitrary repositories (so config/build formats count as much as
+"popular" languages), weighed against build cost (permissive license,
+single/known-buildable repo, plain C sources — a `tree-sitter generate`
+codegen step, needed by e.g. `sql`, raises that cost but doesn't rule a
+grammar out). Niche/narrow-audience grammars (verilog, cuda, fish/zsh,
+perl, R) are deliberately left out for now. This isn't a rigid formula,
+just the standard both batches were judged against.
 
 Done:
 
@@ -67,8 +69,7 @@ Done:
 
 Not yet done (open items from the distribution plan):
 
-- final language selection is still open — 45 are bundled; `sql` and other
-  languages that need `tree-sitter generate` codegen aren't yet;
+- final language selection is still open — 56 are bundled;
 - the Windows build has only been statically verified (see above), not
   dynamically loaded — needs a real `windows-latest` CI run or a Windows
   machine to close that gap;
@@ -104,9 +105,14 @@ uv run python tools/build_grammars.py --all    # host + Linux (Docker) + Windows
 This shallow-fetches each grammar repository at a pinned tag, compiles it
 with `clang`, and writes the compiled archive, manifest, and license files
 under `src/semble_grammars/_grammars/`. `--all` additionally cross-builds the
-Linux archives inside `debian:bookworm-slim` containers (requires a running
+Linux archives inside `debian:trixie-slim` containers (requires a running
 Docker daemon) and, if `x86_64-w64-mingw32-gcc` is on `PATH`, the Windows
 archive (`brew install mingw-w64` on macOS).
+
+A few grammars (e.g. `sql`) don't ship a pre-generated `parser.c` and need
+the `tree-sitter` CLI to generate one first (`npm install -g
+tree-sitter-cli`); the build raises a clear error naming the missing tool
+if it's not on `PATH` when needed.
 
 To build one platform-tagged wheel per already-built grammar archive:
 
