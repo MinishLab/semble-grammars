@@ -1,14 +1,3 @@
-"""Build one platform-specific wheel per grammar archive already present under `_grammars/`.
-
-For each platform directory found in ``semble_grammars/_grammars/`` (produced by
-``build_grammars.py``), this copies the repo into an isolated temp directory with
-every *other* platform's archive pruned out, then builds a wheel tagged for just
-that platform via ``setup.py``'s custom ``bdist_wheel`` command. This keeps a
-Linux install from downloading the macOS archive (and vice versa).
-
-Usage: uv run python tools/build_wheels.py
-"""
-
 from __future__ import annotations
 
 import os

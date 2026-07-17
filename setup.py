@@ -1,7 +1,7 @@
 import os
 
 from setuptools import setup
-from wheel.bdist_wheel import bdist_wheel as _bdist_wheel
+from setuptools.command.bdist_wheel import bdist_wheel as _bdist_wheel
 
 # semble_grammars ships a compiled grammar archive per platform, so unlike a
 # normal pure-Python package it needs a platform-specific wheel tag: a Linux

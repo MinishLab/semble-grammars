@@ -55,7 +55,9 @@ def test_extraction_reuses_cache_on_second_call():
     from semble_grammars._platform import current_platform_tag
 
     get_parser("python")
-    dest = _cache.cache_dir() / current_platform_tag() / "libtree_sitter_python.dylib"
+    manifest = _loader._platform_manifest()
+    filename = manifest["languages"]["python"]["file"]
+    dest = _cache.cache_dir() / current_platform_tag() / filename
     first_mtime = dest.stat().st_mtime_ns
 
     _loader.get_language.cache_clear()

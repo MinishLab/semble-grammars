@@ -1,17 +1,3 @@
-"""Build the compiled grammar bundle for one or more platforms from pinned upstream commits.
-
-Clones each grammar repository at a pinned commit, compiles its parser (and
-external scanner, if any) into a shared library, and packages the result
-into ``semble_grammars/_grammars/<platform>/`` together with a manifest and
-provenance/license metadata.
-
-Usage:
-    uv run python tools/build_grammars.py            # build for the host platform only
-    uv run python tools/build_grammars.py --windows   # cross-build windows-x86_64 via mingw-w64
-    uv run python tools/build_grammars.py --all       # host + Linux (Docker) + Windows (mingw-w64)
-    uv run python tools/build_grammars.py --native    # internal: used inside the build container
-"""
-
 from __future__ import annotations
 
 import hashlib
@@ -167,7 +153,6 @@ GRAMMARS = [
         spdx_license="MIT",
         sources=["src/parser.c", "src/scanner.c"],
     ),
-    # --- batch 2: config/build formats ---
     GrammarSpec(
         language="dockerfile",
         repository="https://github.com/camdencheek/tree-sitter-dockerfile",
@@ -261,7 +246,6 @@ GRAMMARS = [
         spdx_license="MIT",
         sources=["tree-sitter-markdown-inline/src/parser.c", "tree-sitter-markdown-inline/src/scanner.c"],
     ),
-    # --- batch 3: major languages not yet covered ---
     GrammarSpec(
         language="typescript",
         repository="https://github.com/tree-sitter/tree-sitter-typescript",
@@ -345,7 +329,6 @@ GRAMMARS = [
     # sql (DerekStride/tree-sitter-sql) skipped: its tagged releases don't commit a
     # generated src/parser.c, only grammar.js + scanner.c. Adding it needs a
     # `tree-sitter generate` codegen step this build script doesn't have yet.
-    # --- batch 4: web/template ---
     GrammarSpec(
         language="vue",
         repository="https://github.com/tree-sitter-grammars/tree-sitter-vue",
@@ -376,7 +359,6 @@ GRAMMARS = [
         ref="",
         spdx_license="MIT",
     ),
-    # --- batch 5: specialist, repo-frequency-filtered ---
     GrammarSpec(
         language="zig",
         repository="https://github.com/tree-sitter-grammars/tree-sitter-zig",
