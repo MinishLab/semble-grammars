@@ -37,7 +37,7 @@ jobs:
 
       - uses: astral-sh/setup-uv@d0d8abe699bfb85fec6de9f7adb5ae17292296ff
 
-      - run: npm install -g tree-sitter-cli
+      - run: npm install -g tree-sitter-cli@0.26.11
 
       - run: uv run --no-project python scripts/build_grammars.py
 
@@ -90,7 +90,7 @@ jobs:
 
       - uses: astral-sh/setup-uv@d0d8abe699bfb85fec6de9f7adb5ae17292296ff
 
-      - run: npm install -g tree-sitter-cli
+      - run: npm install -g tree-sitter-cli@0.26.11
 
       - run: choco install mingw --no-progress -y
 

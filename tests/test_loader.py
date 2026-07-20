@@ -44,7 +44,7 @@ def test_available_languages_covers_core_set():
 
 @pytest.mark.parametrize("name", available_languages())
 def test_every_bundled_language_loads(name):
-    assert get_language(name)
+    assert get_parser(name)
 
 
 def test_load_capsule_raises_on_missing_symbol():
