@@ -36,7 +36,7 @@ uv run python scripts/build_grammars.py --all     # current, Linux, and Windows
 ```
 
 This requires a C compiler, Git, and the tree-sitter CLI (`npm install -g
-tree-sitter-cli`). Linux cross-builds also require Docker. Build the available
+tree-sitter-cli@0.26.11`). Linux cross-builds also require Docker. Build the available
 platform archives into wheels with:
 
 ```bash

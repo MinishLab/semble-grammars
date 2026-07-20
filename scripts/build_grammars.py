@@ -94,7 +94,7 @@ def clone_source(spec: GrammarSpec) -> Path:
         if not tree_sitter_cli:
             raise RuntimeError(
                 f"{spec.language}: needs `tree-sitter generate` but the tree-sitter CLI isn't installed "
-                "(npm install -g tree-sitter-cli)"
+                "(npm install -g tree-sitter-cli@0.26.11)"
             )
         subprocess.run([tree_sitter_cli, "generate"], cwd=checkout, check=True, timeout=GENERATE_TIMEOUT_SECONDS)
 
