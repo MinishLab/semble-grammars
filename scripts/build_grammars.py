@@ -114,10 +114,11 @@ def compile_grammar(spec: GrammarSpec, checkout: Path, ext: str, compiler: list[
 
 
 LICENSE_FILENAMES = ["LICENSE", "LICENSE.md", "LICENSE.txt", "COPYING.txt"]
+NOTICE_FILENAMES = ["NOTICE", "NOTICE.md", "NOTICE.txt"]
 
 
-def write_license(spec: GrammarSpec, checkout: Path) -> None:
-    """Copy a grammar's license text into the shared licenses directory."""
+def write_license_files(spec: GrammarSpec, checkout: Path) -> None:
+    """Copy a grammar's license and notice text into the shared licenses directory."""
     licenses_dir = GRAMMARS_DIR / "licenses"
     licenses_dir.mkdir(parents=True, exist_ok=True)
     dest_name = f"{spec.language}-LICENSE.txt"
@@ -128,6 +129,13 @@ def write_license(spec: GrammarSpec, checkout: Path) -> None:
 
     text = source.read_text()
     (licenses_dir / dest_name).write_text(text.rstrip("\n") + "\n")
+
+    notice_dest = licenses_dir / f"{spec.language}-NOTICE.txt"
+    notice = next((checkout / name for name in NOTICE_FILENAMES if (checkout / name).is_file()), None)
+    if notice is None:
+        notice_dest.unlink(missing_ok=True)
+    else:
+        notice_dest.write_text(notice.read_text().rstrip("\n") + "\n")
 
 
 def build_bundle(plat: str, ext: str, compiler: list[str]) -> None:
@@ -143,7 +151,7 @@ def build_bundle(plat: str, ext: str, compiler: list[str]) -> None:
         print(f"building {spec.language} from {spec.repository}@{spec.commit}", file=sys.stderr)
         checkout = clone_source(spec)
         lib_path = compile_grammar(spec, checkout, ext, compiler)
-        write_license(spec, checkout)
+        write_license_files(spec, checkout)
         lib_paths.append(lib_path)
 
         manifest_languages[spec.language] = {
@@ -201,7 +209,7 @@ def write_third_party_notices() -> None:
         "This package bundles compiled tree-sitter grammars built from the following",
         "upstream sources. Each grammar is a separate upstream work with its own",
         "license; see `sources.json` for exact commits and `licenses/` for the",
-        "full license text of each.",
+        "full license and notice text of each.",
         "",
         "| Language | Repository | Commit | License |",
         "|---|---|---|---|",

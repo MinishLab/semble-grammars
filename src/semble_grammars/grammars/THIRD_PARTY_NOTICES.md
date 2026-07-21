@@ -3,7 +3,7 @@
 This package bundles compiled tree-sitter grammars built from the following
 upstream sources. Each grammar is a separate upstream work with its own
 license; see `sources.json` for exact commits and `licenses/` for the
-full license text of each.
+full license and notice text of each.
 
 | Language | Repository | Commit | License |
 |---|---|---|---|
