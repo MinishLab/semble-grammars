@@ -10,6 +10,7 @@ PLATFORM_WHEEL_TAGS = {
     "linux-x86_64": "manylinux2014_x86_64",
     "linux-arm64": "manylinux2014_aarch64",
     "windows-x86_64": "win_amd64",
+    "windows-arm64": "win_arm64",
 }
 
 

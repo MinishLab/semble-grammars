@@ -15,7 +15,7 @@ tree = parser.parse(b"def hello(): pass")
 ```
 
 `available_languages()` lists the bundled languages. The package supports
-macOS arm64, Linux x86-64 and arm64, and Windows x86-64.
+macOS arm64 and x86-64, Linux x86-64 and arm64, and Windows arm64 and x86-64.
 
 ## Development
 

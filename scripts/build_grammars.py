@@ -168,11 +168,14 @@ def build_bundle(plat: str, ext: str, compiler: list[str]) -> None:
 
 
 WINDOWS_CROSS_COMPILER = "x86_64-w64-mingw32-gcc"
+MACOS_DEPLOYMENT_TARGETS = {"arm64": "11.0", "x86_64": "10.13"}
 
 
-def _native_compiler() -> list[str]:
+def _native_compiler(system: str, arch: str) -> list[str]:
     """Return a suitable compiler for the host platform."""
-    if platform.system() != "Windows":
+    if system == "darwin":
+        return ["clang", f"-mmacosx-version-min={MACOS_DEPLOYMENT_TARGETS[arch]}"]
+    if system != "windows":
         return ["clang"]
     for candidate in ("gcc", WINDOWS_CROSS_COMPILER):
         if shutil.which(candidate):
@@ -187,7 +190,7 @@ def build_native() -> None:
     os_name = {"darwin": "macos", "linux": "linux", "windows": "windows"}[system]
     arch = {"arm64": "arm64", "aarch64": "arm64", "x86_64": "x86_64", "amd64": "x86_64"}[machine]
     extension = {"darwin": ".dylib", "linux": ".so", "windows": ".dll"}[system]
-    build_bundle(f"{os_name}-{arch}", extension, _native_compiler())
+    build_bundle(f"{os_name}-{arch}", extension, _native_compiler(system, arch))
 
 
 def write_third_party_notices() -> None:
