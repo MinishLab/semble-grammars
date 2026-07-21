@@ -499,5 +499,185 @@
     "commit": "deb0dcf8c4544f07564060f6e9b9f6e4b0bfc27d",
     "ref": "",
     "spdx_license": "MIT"
+  },
+  "haskell": {
+    "repository": "https://github.com/tree-sitter/tree-sitter-haskell",
+    "commit": "0975ef72fc3c47b530309ca93937d7d143523628",
+    "ref": "",
+    "spdx_license": "MIT",
+    "sources": [
+      "src/parser.c",
+      "src/scanner.c"
+    ]
+  },
+  "r": {
+    "repository": "https://github.com/r-lib/tree-sitter-r",
+    "commit": "58a22794466c0fc15b0d3b40531db751593721e8",
+    "ref": "",
+    "spdx_license": "MIT",
+    "sources": [
+      "src/parser.c",
+      "src/scanner.c"
+    ]
+  },
+  "erlang": {
+    "repository": "https://github.com/WhatsApp/tree-sitter-erlang",
+    "commit": "836aa2b6c3af2c7cef3f84049b0ed6d44485a870",
+    "ref": "",
+    "spdx_license": "Apache-2.0",
+    "sources": [
+      "src/parser.c",
+      "src/scanner.c"
+    ]
+  },
+  "perl": {
+    "repository": "https://github.com/ganezdragon/tree-sitter-perl",
+    "commit": "5b97493ce70686e22ec8b9ea261437147e342b49",
+    "ref": "",
+    "spdx_license": "MIT",
+    "sources": [
+      "src/parser.c",
+      "src/scanner.c"
+    ]
+  },
+  "objc": {
+    "repository": "https://github.com/tree-sitter-grammars/tree-sitter-objc",
+    "commit": "181a81b8f23a2d593e7ab4259981f50122909fda",
+    "ref": "",
+    "spdx_license": "MIT"
+  },
+  "ocaml": {
+    "repository": "https://github.com/tree-sitter/tree-sitter-ocaml",
+    "commit": "527d62ef0f24ce0d97fbedf004921d75d0a7e086",
+    "ref": "",
+    "spdx_license": "MIT",
+    "sources": [
+      "grammars/ocaml/src/parser.c",
+      "grammars/ocaml/src/scanner.c"
+    ]
+  },
+  "embedded_template": {
+    "repository": "https://github.com/tree-sitter/tree-sitter-embedded-template",
+    "commit": "3499d85f0a0d937c507a4a65368f2f63772786e1",
+    "ref": "",
+    "spdx_license": "MIT"
+  },
+  "just": {
+    "repository": "https://github.com/casey/tree-sitter-just",
+    "commit": "5685543a6e64f66335e25518c9ae8ffa1dae3d01",
+    "ref": "",
+    "spdx_license": "Apache-2.0",
+    "sources": [
+      "src/parser.c",
+      "src/scanner.c"
+    ]
+  },
+  "kdl": {
+    "repository": "https://github.com/tree-sitter-grammars/tree-sitter-kdl",
+    "commit": "b37e3d58e5c5cf8d739b315d6114e02d42e66664",
+    "ref": "",
+    "spdx_license": "MIT",
+    "sources": [
+      "src/parser.c",
+      "src/scanner.c"
+    ]
+  },
+  "org": {
+    "repository": "https://github.com/emiasims/tree-sitter-org",
+    "commit": "64cfbc213f5a83da17632c95382a5a0a2f3357c1",
+    "ref": "",
+    "spdx_license": "MIT",
+    "sources": [
+      "src/parser.c",
+      "src/scanner.c"
+    ]
+  },
+  "asciidoc": {
+    "repository": "https://github.com/cathaysia/tree-sitter-asciidoc",
+    "commit": "e0710115e7b060ce6681b5182a49a792813006f1",
+    "ref": "",
+    "spdx_license": "Apache-2.0",
+    "sources": [
+      "tree-sitter-asciidoc/src/parser.c",
+      "tree-sitter-asciidoc/src/scanner.c"
+    ]
+  },
+  "typst": {
+    "repository": "https://github.com/uben0/tree-sitter-typst",
+    "commit": "46cf4ded12ee974a70bf8457263b67ad7ee0379d",
+    "ref": "",
+    "spdx_license": "MIT",
+    "sources": [
+      "src/parser.c",
+      "src/scanner.c"
+    ]
+  },
+  "jsonc": {
+    "repository": "https://gitlab.com/WhyNotHugo/tree-sitter-jsonc.git",
+    "commit": "f7890ba894d885d1b2b721cfae759b07d53c8886",
+    "ref": "",
+    "spdx_license": "MIT",
+    "sources": [
+      "src/parser.c"
+    ]
+  },
+  "fortran": {
+    "repository": "https://github.com/stadelmanma/tree-sitter-fortran",
+    "commit": "7edacd2b21aa80057d9725384a1304a1c758e0f8",
+    "ref": "",
+    "spdx_license": "MIT",
+    "sources": [
+      "src/parser.c",
+      "src/scanner.c"
+    ]
+  },
+  "latex": {
+    "repository": "https://github.com/latex-lsp/tree-sitter-latex",
+    "commit": "7e0ecdc02926c7b9b2e0c76003d4fe7b0944f957",
+    "ref": "v0.6.0",
+    "spdx_license": "MIT",
+    "sources": [
+      "src/parser.c",
+      "src/scanner.c"
+    ],
+    "generate": true
+  },
+  "vim": {
+    "repository": "https://github.com/tree-sitter-grammars/tree-sitter-vim",
+    "commit": "3092fcd99eb87bbd0fc434aa03650ba58bd5b43b",
+    "ref": "v0.8.1",
+    "spdx_license": "MIT",
+    "sources": [
+      "src/parser.c",
+      "src/scanner.c"
+    ]
+  },
+  "wat": {
+    "repository": "https://github.com/wasm-lsp/tree-sitter-wasm",
+    "commit": "2ca28a9f9d709847bf7a3de0942a84e912f59088",
+    "ref": "",
+    "spdx_license": "Apache-2.0 WITH LLVM-exception",
+    "sources": [
+      "wat/src/parser.c"
+    ]
+  },
+  "scheme": {
+    "repository": "https://github.com/6cdh/tree-sitter-scheme",
+    "commit": "2d5557fafe49a049485c8cb910be61ede309773a",
+    "ref": "v0.6.0",
+    "spdx_license": "MIT",
+    "sources": [
+      "src/parser.c"
+    ]
+  },
+  "racket": {
+    "repository": "https://github.com/6cdh/tree-sitter-racket",
+    "commit": "56b57807f86aa4ddb14892572b318edd4bc90ebe",
+    "ref": "v0.24.7-1",
+    "spdx_license": "MIT",
+    "sources": [
+      "src/parser.c",
+      "src/scanner.c"
+    ]
   }
 }

@@ -113,7 +113,7 @@ def compile_grammar(spec: GrammarSpec, checkout: Path, ext: str, compiler: list[
     return output
 
 
-LICENSE_FILENAMES = ["LICENSE", "LICENSE.md", "LICENSE.txt", "COPYING.txt"]
+LICENSE_FILENAMES = ["LICENSE", "LICENCE", "LICENSE.md", "LICENSE.txt", "COPYING.txt"]
 NOTICE_FILENAMES = ["NOTICE", "NOTICE.md", "NOTICE.txt"]
 
 
