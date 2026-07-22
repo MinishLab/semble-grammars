@@ -15,7 +15,7 @@ tree = parser.parse(b"def hello(): pass")
 ```
 
 `available_languages()` lists the bundled languages. The package supports
-macOS arm64 and x86-64, Linux x86-64 and arm64, and Windows arm64 and x86-64.
+macOS arm64 and x86-64, Linux arm64 and x86-64, and Windows arm64 and x86-64.
 
 <details>
 <summary>Included grammars (75)</summary>
@@ -35,15 +35,6 @@ The canonical names accepted by `get_parser()` are:
 
 `py` is an alias for `python`, and `terraform` is an alias for `hcl`.
 </details>
-
-## Development
-
-```bash
-make install
-make test
-make lint
-make typecheck
-```
 
 Build grammars from the pinned sources in
 [`sources.json`](src/semble_grammars/grammars/sources.json):
