@@ -22,6 +22,7 @@ full license and notice text of each.
 | elixir | https://github.com/elixir-lang/tree-sitter-elixir | `e2d9e6e0e76b0c436fa48a0b8c32a031d0cbdf49` (v0.3.5) | Apache-2.0 |
 | embedded_template | https://github.com/tree-sitter/tree-sitter-embedded-template | `3499d85f0a0d937c507a4a65368f2f63772786e1` | MIT |
 | erlang | https://github.com/WhatsApp/tree-sitter-erlang | `836aa2b6c3af2c7cef3f84049b0ed6d44485a870` | Apache-2.0 |
+| fortran | https://github.com/stadelmanma/tree-sitter-fortran | `7edacd2b21aa80057d9725384a1304a1c758e0f8` | MIT |
 | gitignore | https://github.com/shunsambongi/tree-sitter-gitignore | `f4685bf11ac466dd278449bcfe5fd014e94aa504` | MIT |
 | go | https://github.com/tree-sitter/tree-sitter-go | `1547678a9da59885853f5f5cc8a99cc203fa2e2c` (v0.25.0) | MIT |
 | gotmpl | https://github.com/ngalaiko/tree-sitter-go-template | `aa71f63de226c5592dfbfc1f29949522d7c95fac` | MIT |
@@ -48,8 +49,10 @@ full license and notice text of each.
 | markdown | https://github.com/tree-sitter-grammars/tree-sitter-markdown | `f969cd3ae3f9fbd4e43205431d0ae286014c05b5` (v0.5.3) | MIT |
 | markdown_inline | https://github.com/tree-sitter-grammars/tree-sitter-markdown | `f969cd3ae3f9fbd4e43205431d0ae286014c05b5` (v0.5.3) | MIT |
 | nix | https://github.com/nix-community/tree-sitter-nix | `ea1d87f7996be1329ef6555dcacfa63a69bd55c6` (v0.3.0) | MIT |
+| objc | https://github.com/tree-sitter-grammars/tree-sitter-objc | `181a81b8f23a2d593e7ab4259981f50122909fda` | MIT |
 | ocaml | https://github.com/tree-sitter/tree-sitter-ocaml | `527d62ef0f24ce0d97fbedf004921d75d0a7e086` | MIT |
 | org | https://github.com/emiasims/tree-sitter-org | `64cfbc213f5a83da17632c95382a5a0a2f3357c1` | MIT |
+| perl | https://github.com/ganezdragon/tree-sitter-perl | `5b97493ce70686e22ec8b9ea261437147e342b49` | MIT |
 | php | https://github.com/tree-sitter/tree-sitter-php | `5b5627faaa290d89eb3d01b9bf47c3bb9e797dea` (v0.24.2) | MIT |
 | php_only | https://github.com/tree-sitter/tree-sitter-php | `5b5627faaa290d89eb3d01b9bf47c3bb9e797dea` (v0.24.2) | MIT |
 | powershell | https://github.com/airbus-cert/tree-sitter-powershell | `d398441825243b00e317e87e1829b9d6a3e54ce0` (v0.26.5) | MIT |
