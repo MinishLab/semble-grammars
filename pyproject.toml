@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "semble-grammars"
-description = "Locally-cached tree-sitter grammar bundle for Semble, with no runtime downloads."
-authors = [{name = "MinishLab", email = "info@minishlab.com"}]
+description = "Prebuilt tree-sitter grammars for Semble"
+authors = [{name = "Thomas van Dongen", email = "thomasvdongen@proton.me"}, { name = "Stéphan Tulkens", email = "stephantul@gmail.com"}]
 readme = { file = "README.md", content-type = "text/markdown" }
 dynamic = ["version"]
 license = "MIT"
