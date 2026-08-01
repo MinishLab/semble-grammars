@@ -32,6 +32,10 @@ def test_terraform_is_an_alias_for_hcl():
     assert get_language("terraform") == get_language("hcl")
 
 
+def test_embeddedtemplate_is_an_alias_for_embedded_template():
+    assert get_language("embeddedtemplate") == get_language("embedded_template")
+
+
 def test_unknown_language_raises_with_available_languages_listed():
     with pytest.raises(LanguageNotFoundError, match="nonexistent"):
         get_parser("nonexistent")

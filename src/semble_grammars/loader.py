@@ -18,6 +18,7 @@ _ALIASES = {
     "py": "python",
     # Terraform files are valid HCL; there is no separate compiled grammar.
     "terraform": "hcl",
+    "embeddedtemplate": "embedded_template",
 }
 
 _OS_NAMES = {"darwin": "macos", "linux": "linux", "windows": "windows"}
