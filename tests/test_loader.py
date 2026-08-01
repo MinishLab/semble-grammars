@@ -30,16 +30,16 @@ def test_get_parser_parses_bundled_languages(name, source, expect_error):
     assert tree.root_node.has_error is expect_error
 
 
-def test_terraform_is_an_alias_for_hcl():
-    assert get_language("terraform") == get_language("hcl")
-
-
-def test_embeddedtemplate_is_an_alias_for_embedded_template():
-    assert get_language("embeddedtemplate") == get_language("embedded_template")
-
-
-def test_zsh_is_an_alias_for_bash():
-    assert get_language("zsh") == get_language("bash")
+@pytest.mark.parametrize(
+    ("alias", "canonical"),
+    [
+        ("terraform", "hcl"),
+        ("embeddedtemplate", "embedded_template"),
+        ("zsh", "bash"),
+    ],
+)
+def test_aliases(alias, canonical):
+    assert get_language(alias) == get_language(canonical)
 
 
 def test_unknown_language_raises_with_available_languages_listed():
