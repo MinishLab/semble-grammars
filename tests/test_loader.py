@@ -20,6 +20,8 @@ from semble_grammars import (
         ("python", b"def foo(:\n", True),
         ("json", b'{"a": [1, 2, 3]}', False),
         ("sql", b"SELECT * FROM foo WHERE x = 1;", False),
+        ("batch", b"@echo off\nset FOO=bar\n", False),
+        ("heex", b"<div><%= @name %></div>\n", False),
     ],
 )
 def test_get_parser_parses_bundled_languages(name, source, expect_error):
@@ -30,6 +32,10 @@ def test_get_parser_parses_bundled_languages(name, source, expect_error):
 
 def test_terraform_is_an_alias_for_hcl():
     assert get_language("terraform") == get_language("hcl")
+
+
+def test_zsh_is_an_alias_for_bash():
+    assert get_language("zsh") == get_language("bash")
 
 
 def test_unknown_language_raises_with_available_languages_listed():

@@ -10,6 +10,7 @@ full license and notice text of each.
 | asciidoc | https://github.com/cathaysia/tree-sitter-asciidoc | `e0710115e7b060ce6681b5182a49a792813006f1` | Apache-2.0 |
 | astro | https://github.com/virchau13/tree-sitter-astro | `213f6e6973d9b456c6e50e86f19f66877e7ef0ee` | MIT |
 | bash | https://github.com/tree-sitter/tree-sitter-bash | `a06c2e4415e9bc0346c6b86d401879ffb44058f7` (v0.25.1) | MIT |
+| batch | https://github.com/wharflab/tree-sitter-batch | `f477847c89b7db79b0d5e3527ba39318bf054e2f` (v0.9.0) | MIT |
 | c | https://github.com/tree-sitter/tree-sitter-c | `b780e47fc780ddc8da13afa35a3f4ed5c157823d` (v0.24.2) | MIT |
 | clojure | https://github.com/sogaiu/tree-sitter-clojure | `3a1ace906c151dd631cf6f149b5083f2b60e6a9e` (v0.0.13) | CC0-1.0 |
 | cmake | https://github.com/uyha/tree-sitter-cmake | `ca627bb5828616b6246aafdc3c3222789e728e37` (v0.7.4) | MIT |
@@ -30,6 +31,7 @@ full license and notice text of each.
 | groovy | https://github.com/murtaza64/tree-sitter-groovy | `deb0dcf8c4544f07564060f6e9b9f6e4b0bfc27d` | MIT |
 | haskell | https://github.com/tree-sitter/tree-sitter-haskell | `0975ef72fc3c47b530309ca93937d7d143523628` | MIT |
 | hcl | https://github.com/tree-sitter-grammars/tree-sitter-hcl | `fad991865fee927dd1de5e172fb3f08ac674d914` (v1.2.0) | Apache-2.0 |
+| heex | https://github.com/phoenixframework/tree-sitter-heex | `5842537f734d7c12685bf27d6005313e3e5a47a0` (v0.9.0) | MIT |
 | html | https://github.com/tree-sitter/tree-sitter-html | `5a5ca8551a179998360b4a4ca2c0f366a35acc03` (v0.23.2) | MIT |
 | ini | https://github.com/justinmk/tree-sitter-ini | `f0285fe577ad298ad79f8633e643ad60646e3027` (v1.4.0) | Apache-2.0 |
 | java | https://github.com/tree-sitter/tree-sitter-java | `94703d5a6bed02b98e438d7cad1136c01a60ba2c` (v0.23.5) | MIT |

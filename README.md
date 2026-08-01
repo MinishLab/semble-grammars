@@ -18,22 +18,23 @@ tree = parser.parse(b"def hello(): pass")
 macOS arm64 and x86-64, Linux arm64 and x86-64, and Windows arm64 and x86-64.
 
 <details>
-<summary>Included grammars (75)</summary>
+<summary>Included grammars (77)</summary>
 
 The canonical names accepted by `get_parser()` are:
 
-`asciidoc`, `astro`, `bash`, `c`, `clojure`, `cmake`, `cpp`, `csharp`, `css`,
-`dart`, `dockerfile`, `dtd`, `elixir`, `embedded_template`, `erlang`, `fortran`,
-`gitignore`, `go`, `gotmpl`, `graphql`, `groovy`, `haskell`, `hcl`, `html`,
-`ini`, `java`, `javascript`, `jinja2`, `json`, `json5`, `jsonc`, `jsonnet`,
-`julia`, `just`, `kdl`, `kotlin`, `latex`, `lua`, `make`, `markdown`,
-`markdown_inline`, `nix`, `objc`, `ocaml`, `org`, `perl`, `php`, `php_only`,
-`powershell`, `properties`, `proto`, `python`, `r`, `racket`, `rst`, `ruby`,
-`rust`, `scala`, `scheme`, `scss`, `solidity`, `sql`, `starlark`, `svelte`,
-`swift`, `toml`, `tsx`, `typescript`, `typst`, `vim`, `vue`, `wat`, `xml`,
-`yaml`, `zig`.
+`asciidoc`, `astro`, `bash`, `batch`, `c`, `clojure`, `cmake`, `cpp`,
+`csharp`, `css`, `dart`, `dockerfile`, `dtd`, `elixir`, `embedded_template`,
+`erlang`, `fortran`, `gitignore`, `go`, `gotmpl`, `graphql`, `groovy`,
+`haskell`, `hcl`, `heex`, `html`, `ini`, `java`, `javascript`, `jinja2`,
+`json`, `json5`, `jsonc`, `jsonnet`, `julia`, `just`, `kdl`, `kotlin`,
+`latex`, `lua`, `make`, `markdown`, `markdown_inline`, `nix`, `objc`,
+`ocaml`, `org`, `perl`, `php`, `php_only`, `powershell`, `properties`,
+`proto`, `python`, `r`, `racket`, `rst`, `ruby`, `rust`, `scala`, `scheme`,
+`scss`, `solidity`, `sql`, `starlark`, `svelte`, `swift`, `toml`, `tsx`,
+`typescript`, `typst`, `vim`, `vue`, `wat`, `xml`, `yaml`, `zig`.
 
-`py` is an alias for `python`, and `terraform` is an alias for `hcl`.
+`py` is an alias for `python`, `terraform` is an alias for `hcl`, and `zsh`
+is an alias for `bash`.
 </details>
 
 Build grammars from the pinned sources in
