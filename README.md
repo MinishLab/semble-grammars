@@ -1,4 +1,7 @@
-# semble-grammars
+<h1 align="center">
+  semble-grammars<br/>
+  <sub>Prebuilt tree-sitter grammars for Semble</sub>
+</h1>
 
 <div align="center">
   <h2>
