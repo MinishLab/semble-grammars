@@ -19,6 +19,8 @@ _ALIASES = {
     # Terraform files are valid HCL; there is no separate compiled grammar.
     "terraform": "hcl",
     "embeddedtemplate": "embedded_template",
+    # Zsh is largely a superset of POSIX shell; there is no separate compiled grammar.
+    "zsh": "bash",
 }
 
 _OS_NAMES = {"darwin": "macos", "linux": "linux", "windows": "windows"}
