@@ -679,5 +679,23 @@
       "src/parser.c",
       "src/scanner.c"
     ]
+  },
+  "batch": {
+    "repository": "https://github.com/wharflab/tree-sitter-batch",
+    "commit": "f477847c89b7db79b0d5e3527ba39318bf054e2f",
+    "ref": "v0.9.0",
+    "spdx_license": "MIT",
+    "sources": [
+      "src/parser.c"
+    ]
+  },
+  "heex": {
+    "repository": "https://github.com/phoenixframework/tree-sitter-heex",
+    "commit": "5842537f734d7c12685bf27d6005313e3e5a47a0",
+    "ref": "v0.9.0",
+    "spdx_license": "MIT",
+    "sources": [
+      "src/parser.c"
+    ]
   }
 }
