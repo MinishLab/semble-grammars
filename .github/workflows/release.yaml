@@ -100,8 +100,10 @@ jobs:
         include:
           - platform: windows-x86_64
             runner: windows-latest
+            msvc_arch: amd64
           - platform: windows-arm64
             runner: windows-11-arm
+            msvc_arch: amd64_arm64
     runs-on: ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
@@ -113,12 +115,13 @@ jobs:
         shell: bash
         run: npm install -g tree-sitter-cli@0.26.11
 
-      - name: Install MinGW-w64
-        if: matrix.platform == 'windows-x86_64'
-        run: choco install mingw --no-progress -y
+      - name: Setup MSVC (${{ matrix.msvc_arch }})
+        uses: ilammy/msvc-dev-cmd@7defe9254715b088f12dddd9942945a3d75cdad5 # v1.9.0
+        with:
+          arch: ${{ matrix.msvc_arch }}
 
       - name: Build grammar bundle for ${{ matrix.platform }}
-        shell: bash
+        shell: pwsh
         run: uv run python scripts/build_grammars.py
 
       - name: Build platform wheel

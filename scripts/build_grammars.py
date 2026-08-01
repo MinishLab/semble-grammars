@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import platform
 import shutil
 import subprocess
@@ -106,10 +107,26 @@ def compile_grammar(spec: GrammarSpec, checkout: Path, ext: str, compiler: list[
     output = BUILD_DIR / f"libtree_sitter_{spec.language}{ext}"
     include_dir = (checkout / spec.sources[0]).parent
     sources = [str(checkout / src) for src in spec.sources]
-    subprocess.run(
-        [*compiler, "-fPIC", "-shared", "-O2", "-I", str(include_dir), *sources, "-o", str(output)],
-        check=True,
-    )
+    if compiler[0] == "cl":
+        subprocess.run(
+            [
+                *compiler,
+                "/nologo",
+                "/LD",
+                "/O2",
+                f"/Fo{BUILD_DIR}{os.sep}",
+                f"/I{include_dir}",
+                *sources,
+                "/link",
+                f"/OUT:{output}",
+            ],
+            check=True,
+        )
+    else:
+        subprocess.run(
+            [*compiler, "-fPIC", "-shared", "-O2", "-I", str(include_dir), *sources, "-o", str(output)],
+            check=True,
+        )
     return output
 
 
@@ -185,10 +202,24 @@ def _native_compiler(system: str, arch: str) -> list[str]:
         return ["clang", f"-mmacosx-version-min={MACOS_DEPLOYMENT_TARGETS[arch]}"]
     if system != "windows":
         return ["clang"]
-    for candidate in ("gcc", WINDOWS_CROSS_COMPILER):
-        if shutil.which(candidate):
-            return [candidate]
-    raise RuntimeError("no MinGW-w64 gcc found on PATH for a native Windows build (choco install mingw)")
+    if not shutil.which("cl"):
+        raise RuntimeError(
+            "no MSVC `cl` compiler found on PATH; run this from a Visual Studio developer "
+            "prompt initialized for the target architecture, e.g. `vcvarsall.bat amd64_arm64` "
+            "for windows-arm64 (see ilammy/msvc-dev-cmd in CI)"
+        )
+    # cl is host-architecture-agnostic; only vcvarsall's VSCMD_ARG_TGT_ARCH tells us what it
+    # actually emits, which is what caught windows-arm64 silently producing x86_64 DLLs before.
+    vscmd_target = {"x86_64": "x64", "arm64": "arm64"}[arch]
+    target_arch = os.environ.get("VSCMD_ARG_TGT_ARCH")
+    if target_arch and target_arch != vscmd_target:
+        raise RuntimeError(
+            f"MSVC environment is configured to target {target_arch}, but building for {arch} "
+            f"(expected VSCMD_ARG_TGT_ARCH={vscmd_target}): re-initialize it with the matching "
+            "vcvarsall/msvc-dev-cmd architecture"
+        )
+    print(f"using MSVC cl targeting {target_arch or arch}", file=sys.stderr)
+    return ["cl"]
 
 
 def build_native() -> None:
