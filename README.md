@@ -1,5 +1,14 @@
 # semble-grammars
 
+<div align="center">
+  <h2>
+    <a href="https://pypi.org/project/semble-grammars/"><img src="https://img.shields.io/pypi/v/semble-grammars?color=%23007ec6&label=pypi%20package" alt="Package version"></a>
+    <a href="https://github.com/MinishLab/semble-grammars/blob/main/LICENSE">
+      <img src="https://img.shields.io/badge/license-MIT-green" alt="License - MIT">
+    </a>
+  </h2>
+</div>
+
 Compiled [tree-sitter](https://tree-sitter.github.io/tree-sitter/) grammars for
 [Semble](https://github.com/MinishLab/semble).
 
