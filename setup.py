@@ -24,6 +24,10 @@ class bdist_wheel(_bdist_wheel):
         target = os.environ.get("SEMBLE_GRAMMARS_WHEEL_PLATFORM")
         if target:
             self.plat_name = PLATFORM_WHEEL_TAGS[target]
+            # finalize_options() above already computed plat_name_supplied from the
+            # pre-override plat_name (empty), so get_tag() would otherwise ignore this
+            # override for macOS tags and fall back to the build host's actual OS version.
+            self.plat_name_supplied = True
 
     def get_tag(self) -> tuple[str, str, str]:
         """Return a python-version-independent tag, keeping only the platform part."""
