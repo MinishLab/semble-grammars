@@ -57,6 +57,11 @@ The canonical names accepted by `get_parser()` are:
 is an alias for `bash`.
 </details>
 
+The MIT license above covers `semble-grammars`' own code. Each bundled grammar is a
+separate upstream work with its own license; see
+[`THIRD_PARTY_NOTICES.md`](src/semble_grammars/grammars/THIRD_PARTY_NOTICES.md) for the
+full list.
+
 ## Building from source
 
 Build grammars from the pinned sources in
