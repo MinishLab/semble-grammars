@@ -53,8 +53,9 @@ The canonical names accepted by `get_parser()` are:
 `scss`, `solidity`, `sql`, `starlark`, `svelte`, `swift`, `toml`, `tsx`,
 `typescript`, `typst`, `vim`, `vue`, `wat`, `xml`, `yaml`, `zig`.
 
-`py` is an alias for `python`, `terraform` is an alias for `hcl`, and `zsh`
-is an alias for `bash`.
+`py` is an alias for `python`, `terraform` is an alias for `hcl`,
+`embeddedtemplate` is an alias for `embedded_template`, and `zsh` is an alias
+for `bash`.
 </details>
 
 The MIT license above covers `semble-grammars`' own code. Each bundled grammar is a
