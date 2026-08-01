@@ -95,10 +95,14 @@ ipython_config.py
 #Pipfile.lock
 
 # UV
-#   Similar to Pipfile.lock, it is generally recommended to include uv.lock in version control.
-#   This is especially recommended for binary packages to ensure reproducibility, and is more
-#   commonly ignored for libraries.
-#uv.lock
+#   Tracked despite being a library: it only pins the dev/CI toolchain resolution used by
+#   `uv sync`/`uv run` in this repo and has no effect on what ships to consumers, who resolve
+#   `dependencies` in pyproject.toml on their own.
+
+# Generated grammar build output. Keep the provenance and notices tracked.
+/assets/
+/src/semble_grammars/grammars/*/
+/src/semble_grammars/grammars/licenses/
 
 # poetry
 #   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
