@@ -19,6 +19,14 @@ The package installs a platform-specific grammar archive and extracts individual
 libraries to a local cache on first use. It does not access the network at
 runtime.
 
+## Installation
+
+```bash
+pip install semble-grammars
+```
+
+## Usage
+
 ```python
 from semble_grammars import get_parser
 
@@ -48,6 +56,8 @@ The canonical names accepted by `get_parser()` are:
 `py` is an alias for `python`, `terraform` is an alias for `hcl`, and `zsh`
 is an alias for `bash`.
 </details>
+
+## Building from source
 
 Build grammars from the pinned sources in
 [`sources.json`](src/semble_grammars/grammars/sources.json):
